@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alessandro Frau · Integrazioni, Odoo e AI per PMI</title>
+<meta name="description" content="Alessandro Frau, sviluppatore freelance a Milano: integrazioni su misura, Odoo, dashboard con AI e agenti WhatsApp per PMI. Casi di lavoro e stack.">
+<link rel="canonical" href="https://fraustudio.com/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta property="og:site_name" content="Frau Studio">
+<meta property="og:title" content="Alessandro Frau · Integrazioni, Odoo e AI per PMI">
+<meta property="og:description" content="Sviluppatore freelance a Milano. Collego gestionali, dati e canali che un'azienda usa già: fatture elettroniche, ERP, CRM, WhatsApp.">
+<meta property="og:url" content="https://fraustudio.com/">
+<meta property="og:image" content="https://fraustudio.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0}
+img{max-width:100%}
+
+/* Layout: colonna unica di lettura; ogni caso e' una scheda a due colonne (metadati a sinistra, racconto a destra) che si impila su telefono */
+:root {
+  --bg: #FAFAF8;
+  --surface: #FFFFFF;
+  --fg: #1A1D22;
+  --muted: #5B636D;
+  --line: #E1E3DF;
+  --accent: #7A1F3D;
+  --accent-soft: #F4E7EC;
+  --ok: #1F6B4A; --ok-soft: #E3F1EA;
+  --wip: #8A5A00; --wip-soft: #FBF0D9;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121418; --surface: #191C21; --fg: #E7E9EC; --muted: #9AA2AC; --line: #2B3038;
+  --accent: #E07A97; --accent-soft: #3A1F29;
+  --ok: #6FCB9F; --ok-soft: #1C3328; --wip: #E8B45A; --wip-soft: #3A2E17;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121418; --surface: #191C21; --fg: #E7E9EC; --muted: #9AA2AC; --line: #2B3038;
+  --accent: #E07A97; --accent-soft: #3A1F29;
+  --ok: #6FCB9F; --ok-soft: #1C3328; --wip: #E8B45A; --wip-soft: #3A2E17;
+  color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 920px; margin: 0 auto; padding-block: 56px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+
+header { display: grid; gap: 20px; padding-bottom: 36px; border-bottom: 1px solid var(--line); }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(32px, 6vw, 48px); line-height: 1.08; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+.lede { max-width: 62ch; margin: 0; font-size: 18px; color: var(--fg); }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px 28px; margin: 8px 0 0; }
+.facts div { display: grid; gap: 2px; align-content: start; }
+.facts dt { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.facts dd { margin: 0; font-weight: 500; }
+
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 44px 0 20px; }
+h2 { font-family: var(--font-display); font-weight: 700; font-size: 24px; margin: 0; }
+.note { font-size: 14px; color: var(--muted); margin: 0; max-width: 52ch; }
+
+.cases { display: grid; gap: 20px; }
+.case { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 24px; display: grid; grid-template-columns: 230px 1fr; gap: 24px; }
+.case > * { min-width: 0; }
+.meta { display: grid; gap: 14px; align-content: start; }
+.status { justify-self: start; font-family: var(--font-mono); font-size: 12px; font-weight: 500; padding: 3px 9px; border-radius: 999px; }
+.status.ok { color: var(--ok); background: var(--ok-soft); }
+.status.wip { color: var(--wip); background: var(--wip-soft); }
+.domain { font-size: 14px; color: var(--muted); margin: 0; }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.stack li { font-family: var(--font-mono); font-size: 12px; padding: 2px 7px; border: 1px solid var(--line); border-radius: 3px; color: var(--fg); }
+h3 { font-family: var(--font-display); font-weight: 700; font-size: 21px; line-height: 1.25; margin: 0 0 12px; text-wrap: balance; }
+.body { display: grid; gap: 12px; }
+.body p { margin: 0; max-width: 64ch; }
+.label { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 2px; }
+.body ul { margin: 0; padding-left: 18px; max-width: 64ch; display: grid; gap: 4px; }
+code { font-family: var(--font-mono); font-size: .9em; background: var(--accent-soft); color: var(--fg); padding: 1px 5px; border-radius: 3px; }
+
+.domainbg { margin-top: 44px; padding: 24px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 6px 6px 0; display: grid; gap: 10px; }
+.domainbg p { margin: 0; max-width: 66ch; }
+
+footer { margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 15px; color: var(--muted); }
+
+.services { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 36px; }
+.service { display: grid; gap: 6px; align-content: start; padding-top: 14px; border-top: 2px solid var(--accent); }
+.service h3 { font-size: 17px; margin: 0; }
+.service p { margin: 0; font-size: 15px; color: var(--muted); }
+
+@media (max-width: 700px) {
+  .wrap { padding-block: 32px 48px; }
+  .case { grid-template-columns: 1fr; gap: 16px; padding: 20px; }
+  .lede { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Automazioni, integrazioni e agenti AI per PMI</p>
+    <h1>Alessandro Frau</h1>
+    <p class="lede">Costruisco sistemi che collegano i gestionali, i dati e i canali che un'azienda usa già: fatture elettroniche, ERP, CRM, WhatsApp. Lavoro dentro progetti di agenzie e software house, oppure direttamente con il cliente.</p>
+    <dl class="facts">
+      <div><dt>Base</dt><dd>Milano, ibrido o remoto</dd></div>
+      <div><dt>Inquadramento</dt><dd>Partita IVA</dd></div>
+      <div><dt>Collaborazione</dt><dd>A progetto, a giornata o fractional</dd></div>
+      <div><dt>Lingue</dt><dd>Italiano, inglese, francese</dd></div>
+    </dl>
+  </header>
+
+  <section class="services" aria-label="Cosa faccio">
+    <div class="service">
+      <h3>Integrazioni su misura</h3>
+      <p>Collego gestionali, piattaforme di settore, e-commerce e canali di messaggistica via API, con scritture senza doppioni e riallineamenti automatici.</p>
+    </div>
+    <div class="service">
+      <h3>Dashboard con AI</h3>
+      <p>Cruscotti costruiti sui dati che l'azienda ha già, con modelli linguistici che classificano, analizzano e smistano al posto delle persone.</p>
+    </div>
+    <div class="service">
+      <h3>Odoo</h3>
+      <p>Moduli personalizzati, configurazione e migrazioni da ERP proprietari.</p>
+    </div>
+    <div class="service">
+      <h3>Agenti WhatsApp</h3>
+      <p>Agenti che conversano con clienti e team su WhatsApp, vocali compresi, e scrivono nei sistemi aziendali.</p>
+    </div>
+  </section>
+
+  <div class="section-head">
+    <h2>Casi di lavoro</h2>
+    <p class="note">Clienti anonimizzati. Lo stato indica a che punto è ogni progetto oggi.</p>
+  </div>
+
+  <div class="cases">
+
+    <article class="case">
+      <div class="meta">
+        <span class="status ok">In produzione</span>
+        <p class="domain">Ristorazione · controllo di gestione</p>
+        <ul class="stack">
+          <li>Google Apps Script</li><li>Google Sheets</li><li>Google Drive</li><li>HtmlService</li><li>Claude API</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Controllo costi dalle fatture passive di un ristorante</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Il titolare decideva gli acquisti senza conoscere il peso reale di alimenti e bevande. I dati c'erano, chiusi negli XML delle fatture elettroniche.</p>
+          <p><span class="label">Cosa ho costruito</span>Un sistema che legge le fatture FatturaPA, classifica ogni riga per centro di costo e mostra costi e margine in una dashboard. Un modello linguistico classifica solo i prodotti nuovi; gli altri arrivano dal catalogo.</p>
+          <p><span class="label">I limiti di Apps Script come scelte di progetto</span></p>
+          <ul>
+            <li><strong>Il foglio non è il database.</strong> La fonte della verità sono gli XML su Drive: il foglio si ricostruisce da zero in qualsiasi momento.</li>
+            <li><strong>Il limite di tempo diventa un lotto.</strong> La ricostruzione procede a blocchi, così anche anni di fatture non si interrompono a metà.</li>
+            <li><strong>Le quote spingono al riuso.</strong> Più cresce il catalogo, meno chiamate al modello e classificazioni sempre coerenti.</li>
+            <li><strong>Nessun server.</strong> Tutto resta nell'account Google del cliente, a costo quasi nullo.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status ok">In produzione</span>
+        <p class="domain">CRM · WhatsApp · riattivazione clienti</p>
+        <ul class="stack">
+          <li>Node.js</li><li>WhatsApp Cloud API</li><li>Claude API</li><li>SQLite</li><li>Whisper</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Pico, agente WhatsApp che risveglia i lead dormienti</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Nei CRM restano centinaia di contatti che hanno chiesto un preventivo o comprato una volta, poi sono spariti. Nessuno li ricontatta: non c'è tempo, e non si sa da chi partire.</p>
+          <p><span class="label">Cosa ho costruito</span>Pico è un mio prodotto. Scrive su WhatsApp ai contatti fermi nel CRM, porta avanti la conversazione, capisce anche i vocali e passa all'attività chi è pronto a comprare o prenotare. Il primo cliente ha registrato un aumento delle vendite grazie ai lead dormienti tornati attivi.</p>
+          <p><span class="label">Scelte tecniche</span>Integrazione diretta con le API ufficiali di Meta, trascrizione dei vocali, stato delle conversazioni persistito. L'architettura è riusabile: la sto adattando a un secondo caso d'uso, la reportistica dei team sul campo.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status ok">Consegnato</span>
+        <p class="domain">Medicina estetica · CRM</p>
+        <ul class="stack">
+          <li>Odoo 17</li><li>Docker</li><li>PostgreSQL</li><li>Aircall</li><li>WhatsApp</li>
+        </ul>
+      </div>
+      <div>
+        <h3>CRM Odoo con telefonia e WhatsApp per una clinica</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Chiamate, messaggi e appuntamenti vivevano in strumenti separati, senza uno storico unico del paziente.</p>
+          <p><span class="label">Cosa ho costruito</span>Un CRM su Odoo per il call center della clinica, in un team di tre sviluppatori. Ho curato la parte Odoo e le integrazioni.</p>
+          <ul>
+            <li><strong>Le chiamate entrano in Odoo.</strong> Ogni chiamata del centralino cloud si aggancia al contatto riconosciuto dal numero. Se il numero è nuovo, nasce un contatto e il primo interesse diventa un'opportunità.</li>
+            <li><strong>WhatsApp nello stesso storico.</strong> Le conversazioni arrivano nella scheda del paziente accanto alle chiamate, e l'operatore risponde da Odoo senza cambiare strumento.</li>
+            <li><strong>Un percorso fino all'appuntamento.</strong> La pipeline segue le fasi reali del call center, dal primo contatto alla visita, con promemoria per i richiami.</li>
+            <li><strong>Sviluppo in un ambiente isolato.</strong> Odoo 17 in container con il proprio database, separato da ogni altro progetto: niente moduli o dati condivisi tra clienti.</li>
+            <li><strong>Modulo neutro.</strong> Il modulo non porta il marchio di chi rivende il servizio, quindi si può installare su un altro cliente senza riscriverlo.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status ok">Consegnato</span>
+        <p class="domain">Sicurezza sul lavoro · integrazione gestionali</p>
+        <ul class="stack">
+          <li>Odoo</li><li>Cartsan Web API</li><li>Swagger</li><li>MySQL</li><li>Migrazione dati</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Odoo collegato a Cartsan al posto di un gestionale legacy</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Una società di servizi per la sicurezza sul lavoro gestisce le aziende clienti con un gestionale datato. Ogni assunzione o cessazione va poi riportata a mano su Cartsan, la piattaforma di medicina del lavoro: doppio inserimento ed errori.</p>
+          <p><span class="label">Cosa ho costruito</span>Odoo al posto del vecchio gestionale, come unico punto di inserimento per aziende, dipendenti e calendario. Cartsan si aggiorna da solo.</p>
+          <ul>
+            <li><strong>Sincronizzazione su evento.</strong> Quando in Odoo si inserisce un dipendente o se ne registra la cessazione, Odoo chiama le Web API di Cartsan e aggiorna l'anagrafica. Niente esportazioni né reinserimenti.</li>
+            <li><strong>Prima lo sviluppo, poi la produzione.</strong> L'integrazione è stata costruita e collaudata sull'ambiente di sviluppo di Cartsan, a partire dalla documentazione Swagger delle API, e solo dopo portata sui dati reali.</li>
+            <li><strong>Mappatura tra due modelli dati.</strong> Aziende, sedi e dipendenti sono organizzati in modo diverso in Odoo e in Cartsan: la corrispondenza tra i campi è esplicita e documentata, così si può verificare e mantenere.</li>
+            <li><strong>Errori visibili, non persi.</strong> Se Cartsan rifiuta un aggiornamento, l'operazione resta segnalata in Odoo e si può ripetere, invece di sparire in silenzio.</li>
+            <li><strong>Recupero dello storico.</strong> Il database MySQL del vecchio gestionale è la base per migrare anagrafiche e rapporti esistenti.</li>
+            <li><strong>Perimetro a fasi.</strong> Ho segnalato che il budget iniziale non copriva il progetto completo. Il primo rilascio è stato ristretto al flusso con più valore, la sincronizzazione dei dipendenti verso Cartsan.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status wip">In corso</span>
+        <p class="domain">PMI · ERP</p>
+        <ul class="stack">
+          <li>Odoo.sh</li><li>Odoo Enterprise</li><li>Migrazione ERP</li><li>Dashboard</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Migrazione da un ERP proprietario a Odoo</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>L'azienda usa un ERP proprietario installato su un server in sede, gestito da un fornitore esterno. Vuole uscire dall'intero ecosistema del vecchio fornitore, non solo cambiare un modulo.</p>
+          <p><span class="label">Cosa sto facendo</span>Il progetto è nato come integrazione via API con l'ERP esistente. Dall'analisi è emerso che la scelta giusta era una migrazione completa, e il perimetro è cambiato di conseguenza.</p>
+          <ul>
+            <li><strong>Analisi con il fornitore uscente.</strong> Partecipo agli incontri tecnici con chi gestisce oggi ERP e server, per mappare dati, database e dipendenze prima di pianificare il passaggio.</li>
+            <li><strong>Dal server in sede al cloud gestito.</strong> L'ipotesi di arrivo è Odoo Enterprise su Odoo.sh per ERP e database, così l'azienda non dipende più da un server locale.</li>
+            <li><strong>Migrazione come occasione.</strong> Oltre al trasferimento dei dati: dashboard su misura e revisione dei processi che oggi esistono solo perché il vecchio sistema li imponeva.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status ok">Consegnato</span>
+        <p class="domain">Studio legale · dashboard con AI</p>
+        <ul class="stack">
+          <li>Odoo 17</li><li>Claude API</li><li>WhatsApp</li><li>Docker</li><li>AWS</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Intake con AI e smistamento dei casi per uno studio legale</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Uno studio di una decina di persone riceve richieste da telefono, social e WhatsApp senza un CRM né un sistema interno. Chi assegna un caso a quale avvocato lo decide a mano, ogni volta.</p>
+          <p><span class="label">Cosa ho costruito</span>Un modulo di intake su Odoo. Ogni richiesta viene registrata, analizzata da un modello linguistico e assegnata all'avvocato giusto. Una dashboard mostra tutto, e gli avvocati possono correggere l'assegnazione dalla dashboard o direttamente da WhatsApp.</p>
+          <ul>
+            <li><strong>Sopra Odoo, non accanto.</strong> Invece di un'app separata, Odoo con un'interfaccia alleggerita nei colori dello studio: CRM, firma degli incarichi e storico nello stesso posto.</li>
+            <li><strong>Gli strumenti esistenti restano.</strong> Lo studio usava già un proprio assistente AI personalizzato e non voleva perderlo: la dashboard lo interroga.</li>
+            <li><strong>Dati sensibili.</strong> L'infrastruttura gira su cloud dedicato, con la sicurezza come requisito di partenza.</li>
+            <li><strong>Demo funzionante prima del contratto.</strong> Prototipo su Odoo in container con dati inventati, usato nella trattativa con lo studio.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status wip">In corso</span>
+        <p class="domain">E-commerce · gioielli personalizzati</p>
+        <ul class="stack">
+          <li>Odoo</li><li>E-commerce Odoo</li><li>WhatsApp</li><li>API JSON-2</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Un brand di gioielli interamente su Odoo</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Un nuovo brand di gioielli personalizzati parte da zero: negozio online, clienti, magazzino e fatture devono stare in un unico sistema dal primo giorno.</p>
+          <p><span class="label">Cosa sto costruendo</span>Nel team mi occupo di Odoo e delle integrazioni: configurazione di CRM, magazzino e fatturazione, collegamento di WhatsApp al CRM e delle richieste di gioielli su misura.</p>
+          <ul>
+            <li><strong>Architettura valutata prima di scegliere.</strong> Avevo progettato un middleware tra un e-commerce esterno e Odoo, con verifica della firma dei webhook, scritture senza doppioni tramite ID esterno e riallineamento notturno. Il team ha poi scelto l'e-commerce nativo di Odoo, che elimina un sistema da mantenere.</li>
+            <li><strong>Ipotesi scritte nella stima.</strong> Volumi, tipo di clienti e perimetro della fatturazione sono dichiarati nel preventivo, in giornate per blocco di lavoro, così ogni cambio di perimetro ha un costo visibile.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status wip">In corso · MVP</span>
+        <p class="domain">Maglificio · magazzino e controllo di gestione</p>
+        <ul class="stack">
+          <li>JavaScript</li><li>Google Apps Script</li><li>Google Sheets</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Gestionale magazzino filati con tracciabilità per capo</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Un maglificio lavora con una trentina di filati e deve sapere quanto filato ha, da quale lotto, e in quali capi è finito.</p>
+          <p><span class="label">Cosa sto costruendo</span>Un gestionale con carico dei filati dai documenti di trasporto e scarico per ordine, più una pagina ordini per capi fatti con fino a cinque filati. Ogni capo è tracciabile fino al filato e al suo storico.</p>
+          <ul>
+            <li><strong>Il vincolo del lotto nel modello dati.</strong> Un ordine usa un solo lotto per colore, per evitare differenze di tinta: il sistema lo impone invece di affidarlo alla memoria di chi prepara l'ordine.</li>
+            <li><strong>MVP sullo stesso stack del prodotto finale</strong>, ripreso dal sistema di controllo costi per la ristorazione. Quello che il cliente prova è quello che riceverà.</li>
+            <li><strong>Manutenibile senza teleassistenza.</strong> È un requisito di progetto. In valutazione il passaggio a un database PostgreSQL ospitato, con preventivo separato per hosting e manutenzione.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status wip">R&amp;D, in test</span>
+        <p class="domain">Wine-tech · anticontraffazione</p>
+        <ul class="stack">
+          <li>Computer vision</li><li>Python</li>
+        </ul>
+      </div>
+      <div>
+        <h3>WineGuard, autenticazione ottica delle etichette del vino</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Le soluzioni anticontraffazione per il vino chiedono chip, RFID o etichette speciali: costi e modifiche di linea che molte cantine non sostengono.</p>
+          <p><span class="label">Cosa sto costruendo</span>Un sistema solo software che riconosce un'etichetta autentica dalla struttura microscopica delle fibre della carta, unica per ogni foglio e impossibile da riprodurre. Basta la fotocamera di uno smartphone.</p>
+          <p><span class="label">Come lo sto validando</span></p>
+          <ul>
+            <li><strong>Test con criteri di arresto.</strong> Il prototipo deve superare tre prove binarie prima di andare avanti. Il protocollo in corso usa 24 fogli in sei condizioni diverse, con cicli di umidità, per verificare che la firma della carta resti leggibile nel tempo.</li>
+            <li><strong>Il vantaggio sta nella carta.</strong> Il lavoro con i produttori di carte speciali punta a supporti progettati insieme, più difendibili di qualsiasi algoritmo.</li>
+            <li><strong>Mercato scelto sui dati.</strong> Il primo segmento è il vino di fascia alta e i consorzi, dove la contraffazione esiste davvero e c'è disponibilità a pagare per difendersi.</li>
+            <li><strong>Pensato per integrarsi.</strong> Affianca blockchain e passaporto digitale di prodotto: fornisce il legame fisico tra la bottiglia e il suo record digitale.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div class="meta">
+        <span class="status wip">In avvio</span>
+        <p class="domain">Lead generation B2B</p>
+        <ul class="stack">
+          <li>Node.js</li><li>GitHub Actions</li><li>Google Places API</li><li>Claude API</li><li>Zoho Mail</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Sistema di cold outreach a costo quasi nullo</h3>
+        <div class="body">
+          <p><span class="label">Problema</span>Lo stack tipico per trovare e contattare aziende costa 100–150 € al mese tra abbonamenti diversi.</p>
+          <p><span class="label">Cosa ho costruito</span>Una pipeline che sostituisce tre abbonamenti con codice proprio, eseguita su job programmati. Costo di esercizio stimato: 3–5 € al mese. È pronta e in fase di avvio.</p>
+          <ul>
+            <li><strong>Ricerca delle aziende.</strong> Le attività di un territorio e di un settore arrivano dalla API di Google Places, al posto dei database a pagamento.</li>
+            <li><strong>Messaggi personalizzati.</strong> Un modello linguistico leggero scrive l'apertura di ogni email a partire dai dati dell'azienda.</li>
+            <li><strong>Esecuzione senza server.</strong> I job girano su GitHub Actions a orari fissi: niente macchina da mantenere accesa.</li>
+            <li><strong>Reputazione protetta.</strong> Gli invii partono da un dominio dedicato, separato da quello principale, così un problema di consegna non tocca la posta di lavoro.</li>
+          </ul>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <section class="domainbg" aria-labelledby="bg-title">
+    <h2 id="bg-title">Da dove arrivo</h2>
+    <p>Ho lavorato come tester su app e dispositivi mobili per piattaforme di crowdtesting internazionali. Da lì viene un'abitudine che porto in ogni progetto: chiedermi come un sistema si può rompere prima di consegnarlo.</p>
+    <p>Oggi lavoro dentro i progetti di altri team e direttamente con le PMI. Il metodo è lo stesso: capire come l'azienda lavora davvero, scegliere lo strumento più semplice che regge, collegarlo a quello che c'è già.</p>
+  </section>
+
+  <footer>
+    <span>Codice: <a href="https://github.com/Aleczf" target="_blank" rel="noopener">github.com/Aleczf</a></span>
+    <span>Email: <a href="mailto:alessandro.frau88@gmail.com">alessandro.frau88@gmail.com</a></span>
+  </footer>
+</div>
+</body>
+</html>
