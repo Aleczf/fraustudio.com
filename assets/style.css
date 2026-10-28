@@ -1233,3 +1233,16 @@ html {
 .work-card .work-card__external {
   pointer-events: auto;
 }
+
+/* ---- Card lavori ad altezza uguale: il piede resta in fondo ---- */
+.work-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.work-card__footer {
+  align-self: stretch;
+  margin-top: auto;
+  padding-top: 20px;
+}
