@@ -378,7 +378,7 @@ CONTACT = {
         "email": "Email",
         "submit": "Invia il problema →",
         "reply_time": "Ti rispondo entro 2 giorni lavorativi.",
-        "privacy": "Usi questi dati solo per risponderti. Dettagli nell'",
+        "privacy": "Uso questi dati solo per risponderti. Dettagli nell'",
         "sent": "Ricevuto. Ti rispondo entro 2 giorni lavorativi.",
         "error": "Non è partito. Riprova tra poco oppure scrivimi a",
     },
