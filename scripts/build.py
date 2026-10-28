@@ -39,7 +39,6 @@ NAV = {
 }
 
 HERO = {
-    "kicker": "AI PROCESS ENGINEERING · MILANO",
     "lines": ["Non un'agenzia.", "Non un dipendente.", "Non il solito freelance."],
     "sub": "Entro nei processi della tua azienda e costruisco l'automazione che serve — in giorni, non in trimestri. Analisi sul campo, AI dove conviene davvero, soluzioni che il tuo team sa mantenere.",
     "cta_primary": "Descrivimi un processo →",
@@ -220,7 +219,7 @@ WORKS = {
         {
             "slug": "fero",
             "summary": "Vetrina, scelta assistita, contatti e back-office: di norma quattro fornitori e settimane di coordinamento.",
-            "badge": "CONCEPT DIMOSTRATIVO", "note": "il codice è vero",
+            "badge": "CONCEPT DIMOSTRATIVO",
             "name": "FERØ",
             "category": "Sistema completo · AI · E-commerce",
             "challenge": "Una piccola impresa che vende un prodotto premium ha bisogno di vetrina credibile, scelta assistita, acquisizione contatti e back-office: di norma quattro fornitori diversi e settimane di coordinamento.",
@@ -354,7 +353,7 @@ def head(title, description, path):
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/assets/style.css?v={CSS_VERSION}">
 <script>document.documentElement.classList.add("js")</script>
 </head>
@@ -566,7 +565,6 @@ def home():
   <script type="application/ld+json">{person_jsonld()}</script>
   <section id="top" class="hero">
     <div class="container">
-      <p class="kicker hero__kicker">{e(HERO["kicker"])}</p>
       <h1 class="hero__heading">
 {chr(10).join(lines)}
       </h1>
