@@ -20,7 +20,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v=ed98e81d81">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -157,7 +157,8 @@
     closeBtn.addEventListener("click", closeMenu);
     menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
 
-    // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx)
+    // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx). Soglia 0 e non 0.2:
+    // con 12 card la sezione Lavori su telefono è alta più di 5 schermi e il 20% non entra mai.
     var items = document.querySelectorAll(".reveal");
     if (!("IntersectionObserver" in window)) {
       items.forEach(function (el) { el.classList.add("is-visible"); });
@@ -167,7 +168,7 @@
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
     items.forEach(function (el) { io.observe(el); });
   })();
 </script>

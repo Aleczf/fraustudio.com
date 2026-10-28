@@ -10,9 +10,11 @@ e committa i file generati: index.html, 404.html, lavori/<slug>/index.html, site
 """
 from html import escape
 from pathlib import Path
+import hashlib
 import json
 
 ROOT = Path(__file__).resolve().parent.parent
+CSS_VERSION = hashlib.sha256((ROOT / "assets/style.css").read_bytes()).hexdigest()[:10]
 SITE_URL = "https://fraustudio.com"
 EMAIL = "alessandro.frau88@gmail.com"
 GITHUB = "https://github.com/Aleczf"
@@ -85,6 +87,7 @@ WORKS = {
     "cases": [
         {
             "slug": "controllo-costi-ristorante",
+            "summary": "Ore ogni settimana a smistare a mano le fatture passive, senza sapere quanto pesassero davvero food e beverage.",
             "badge": "CLIENTE REALE", "filled": True, "note": "in produzione",
             "name": "Controllo costi per un ristorante",
             "category": "Ristorazione · Controllo di gestione · AI",
@@ -101,6 +104,7 @@ WORKS = {
         },
         {
             "slug": "pico",
+            "summary": "Nei CRM dormono contatti che hanno già chiesto un preventivo o comprato. Nessuno li ricontatta.",
             "badge": "PRODOTTO", "note": "in produzione",
             "name": "Pico",
             "category": "Agente AI · WhatsApp · Riattivazione clienti",
@@ -132,6 +136,7 @@ WORKS = {
         },
         {
             "slug": "odoo-cartsan",
+            "summary": "Ogni assunzione o cessazione inserita due volte: nel gestionale e, a mano, su Cartsan.",
             "badge": "CLIENTE REALE", "filled": True, "note": "consegnato",
             "name": "Odoo collegato a Cartsan",
             "category": "Sicurezza sul lavoro · Integrazione gestionali",
@@ -150,6 +155,7 @@ WORKS = {
         },
         {
             "slug": "intake-studio-legale",
+            "summary": "Richieste da telefono, social e WhatsApp, e ogni caso assegnato a mano a un avvocato.",
             "badge": "CLIENTE REALE", "filled": True, "note": "consegnato",
             "name": "Intake con AI per uno studio legale",
             "category": "Studio legale · Dashboard con AI · Odoo",
@@ -166,6 +172,7 @@ WORKS = {
         },
         {
             "slug": "migrazione-erp-odoo",
+            "summary": "Un ERP proprietario su un server in sede, e un'azienda che vuole uscire dall'ecosistema del fornitore.",
             "badge": "CLIENTE REALE", "filled": True, "note": "in corso",
             "name": "Da un ERP proprietario a Odoo",
             "category": "PMI · ERP · Migrazione",
@@ -181,6 +188,7 @@ WORKS = {
         },
         {
             "slug": "gioielli-odoo",
+            "summary": "Un brand di gioielli personalizzati che parte da zero, senza sistemi da ereditare.",
             "badge": "CLIENTE REALE", "filled": True, "note": "in corso",
             "name": "Un brand di gioielli su Odoo",
             "category": "E-commerce · Gioielli personalizzati · Odoo",
@@ -195,6 +203,7 @@ WORKS = {
         },
         {
             "slug": "magazzino-filati",
+            "summary": "Una trentina di filati da seguire per quantità, lotto e capi in cui finiscono.",
             "badge": "CLIENTE REALE", "filled": True, "note": "MVP in corso",
             "name": "Magazzino filati per un maglificio",
             "category": "Manifattura · Magazzino · Controllo di gestione",
@@ -210,6 +219,7 @@ WORKS = {
         },
         {
             "slug": "fero",
+            "summary": "Vetrina, scelta assistita, contatti e back-office: di norma quattro fornitori e settimane di coordinamento.",
             "badge": "CONCEPT DIMOSTRATIVO", "note": "il codice è vero",
             "name": "FERØ",
             "category": "Sistema completo · AI · E-commerce",
@@ -221,6 +231,7 @@ WORKS = {
         },
         {
             "slug": "wineguard",
+            "summary": "L'anticontraffazione per il vino chiede chip, RFID o etichette speciali che molte cantine non sostengono.",
             "badge": "R&D", "note": "in test",
             "name": "WineGuard",
             "category": "Wine-tech · Anticontraffazione · Computer vision",
@@ -290,7 +301,7 @@ WRITING = {
 
 FAQ = {
     "kicker": "FAQ",
-    "question": "Domande frequenti",
+    "question": "Cosa mi chiedono più spesso?",
     "items": [
         ("Che differenza c'è tra te e un'agenzia di automazione?", "Un'agenzia ti vende il suo pacchetto. Io entro nel tuo processo, capisco cosa serve davvero — a volte è meno di quello che pensavi — e costruisco solo quello. E resto una persona sola: chi diagnostica è chi costruisce."),
         ("Lavori anche con agenzie e software house?", "Sì. Entro nei progetti di altri team per la parte Odoo, integrazioni e AI, oppure lavoro direttamente con il cliente. Il metodo è lo stesso: capire come l'azienda lavora davvero, scegliere lo strumento più semplice che regge, collegarlo a quello che c'è già."),
@@ -346,7 +357,7 @@ def head(title, description, path):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v={CSS_VERSION}">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -455,7 +466,8 @@ SCRIPT = """
     closeBtn.addEventListener("click", closeMenu);
     menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
 
-    // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx)
+    // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx). Soglia 0 e non 0.2:
+    // con 12 card la sezione Lavori su telefono è alta più di 5 schermi e il 20% non entra mai.
     var items = document.querySelectorAll(".reveal");
     if (!("IntersectionObserver" in window)) {
       items.forEach(function (el) { el.classList.add("is-visible"); });
@@ -465,7 +477,7 @@ SCRIPT = """
       entries.forEach(function (e) {
         if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
     items.forEach(function (el) { io.observe(el); });
   })();
 </script>
@@ -511,7 +523,7 @@ def work_card(work):
           {badge(work)}
           <p class="kicker work-card__category">{e(work["category"])}</p>
           <h3 class="work-card__name">{e(work["name"])}</h3>
-          <p class="work-card__challenge">{e(work["challenge"])}</p>
+          <p class="work-card__challenge">{e(work.get("summary", work["challenge"]))}</p>
           <p class="work-card__outcome">{e(work["outcome"])}</p>
           <div class="work-card__footer">
             <span class="work-card__cta">{e(WORKS["view_case"])} <span aria-hidden="true">&rarr;</span></span>{external}
@@ -621,7 +633,7 @@ def home():
           <h3>{e(title)}</h3>
           <span class="badge">{e(WRITING["soon_label"])}</span>
         </div>""")
-    writing = section("scrittura", WRITING["kicker"], WRITING["question"], '      <div class="writing__grid">\n' + "\n".join(cards) + "\n      </div>")
+    writing = "" if not any(href for _, href in WRITING["cards"]) else section("scrittura", WRITING["kicker"], WRITING["question"], '      <div class="writing__grid">\n' + "\n".join(cards) + "\n      </div>")
 
     items = "\n".join(f"""        <details class="faq__item">
           <summary class="faq__question"><span>{e(q)}</span><span class="faq__icon" aria-hidden="true"></span></summary>
