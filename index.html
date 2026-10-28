@@ -16,99 +16,197 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="/assets/style.css">
+<script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <p class="eyebrow">[Sottotitolo breve dello studio]</p>
-    <h1>Frau Studio</h1>
-    <p class="lede">[Frase di presentazione: cosa fa lo studio, per chi e come. Due o tre righe al massimo.]</p>
-    <dl class="facts">
-      <div><dt>[Voce]</dt><dd>[Valore]</dd></div>
-      <div><dt>[Voce]</dt><dd>[Valore]</dd></div>
-      <div><dt>[Voce]</dt><dd>[Valore]</dd></div>
-      <div><dt>[Voce]</dt><dd>[Valore]</dd></div>
-    </dl>
+
+<nav class="site-nav" aria-label="Principale">
+  <div class="container">
+    <a class="brand" href="/">Frau Studio</a>
+    <ul>
+      <li><a href="#metodo">Metodo</a></li>
+      <li><a href="#lavori">Lavori</a></li>
+      <li><a href="#chi-sono">Chi sono</a></li>
+      <li><a href="#contatto">Contatto</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+  <header class="hero container">
+    <p class="kicker">[Kicker · Città]</p>
+    <h1>
+      <span class="line">[Prima riga.]</span>
+      <span class="line">[Seconda riga.]</span>
+      <span class="line">[Terza riga.]</span>
+    </h1>
+    <p class="sub">[Sottotitolo: cosa fai, per chi, in quanto tempo. Due righe al massimo.]</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#contatto">[CTA primaria] <span aria-hidden="true">→</span></a>
+      <a class="btn btn-secondary" href="#metodo">[CTA secondaria] <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="context-bar">
+      <p>[Riga di contesto, discreta, in corpo didascalia.]</p>
+    </div>
   </header>
 
-  <section class="services" aria-label="Servizi">
-    <div class="service">
-      <h3>[Servizio]</h3>
-      <p>[Descrizione del servizio in una o due frasi.]</p>
+  <section id="metodo" class="container reveal" aria-labelledby="metodo-title">
+    <div class="section-head">
+      <p class="kicker">Metodo</p>
+      <h2 id="metodo-title">[Domanda di sezione?]</h2>
+      <p class="caption">[Introduzione breve alla sezione.]</p>
     </div>
-    <div class="service">
-      <h3>[Servizio]</h3>
-      <p>[Descrizione del servizio in una o due frasi.]</p>
-    </div>
-    <div class="service">
-      <h3>[Servizio]</h3>
-      <p>[Descrizione del servizio in una o due frasi.]</p>
-    </div>
-    <div class="service">
-      <h3>[Servizio]</h3>
-      <p>[Descrizione del servizio in una o due frasi.]</p>
+    <ol class="steps">
+      <li class="step">
+        <span class="num">01</span>
+        <h3>[Fase]</h3>
+        <p>[Descrizione della fase.]</p>
+      </li>
+      <li class="step">
+        <span class="num">02</span>
+        <h3>[Fase]</h3>
+        <p>[Descrizione della fase.]</p>
+      </li>
+      <li class="step">
+        <span class="num">03</span>
+        <h3>[Fase]</h3>
+        <p>[Descrizione della fase.]</p>
+      </li>
+    </ol>
+    <div class="closing">
+      <p>[Riga di chiusura: le formule di ingaggio.]</p>
     </div>
   </section>
 
-  <div class="section-head">
-    <h2>[Progetti]</h2>
-    <p class="note">[Nota sulla sezione.]</p>
-  </div>
-
-  <div class="cases">
-
-    <article class="case">
-      <div class="meta">
-        <span class="status ok">[Stato concluso]</span>
-        <p class="domain">[Settore · ambito]</p>
-        <ul class="stack">
-          <li>[Tecnologia]</li><li>[Tecnologia]</li><li>[Tecnologia]</li>
-        </ul>
-      </div>
-      <div>
-        <h3>[Titolo del progetto]</h3>
-        <div class="body">
-          <p><span class="label">[Etichetta]</span>[Paragrafo di testo.]</p>
-          <p><span class="label">[Etichetta]</span>[Paragrafo di testo.]</p>
-          <ul>
-            <li><strong>[Punto in evidenza.]</strong> [Spiegazione.]</li>
-            <li><strong>[Punto in evidenza.]</strong> [Spiegazione.]</li>
-          </ul>
+  <section id="lavori" class="container reveal" aria-labelledby="lavori-title">
+    <div class="section-head">
+      <p class="kicker">Lavori</p>
+      <h2 id="lavori-title">[Domanda di sezione?]</h2>
+      <p class="caption">[Nota di trasparenza sulla sezione.]</p>
+    </div>
+    <div class="works">
+      <article class="work">
+        <div class="work__top">
+          <p class="kicker">[Categoria · ambito]</p>
+          <span class="badge badge--real">[Badge]</span>
         </div>
-      </div>
-    </article>
-
-    <article class="case">
-      <div class="meta">
-        <span class="status wip">[Stato in corso]</span>
-        <p class="domain">[Settore · ambito]</p>
-        <ul class="stack">
-          <li>[Tecnologia]</li><li>[Tecnologia]</li>
-        </ul>
-      </div>
-      <div>
-        <h3>[Titolo del progetto]</h3>
-        <div class="body">
-          <p><span class="label">[Etichetta]</span>[Paragrafo di testo.]</p>
-          <p><span class="label">[Etichetta]</span>[Paragrafo di testo.]</p>
+        <h3>[Nome del progetto]</h3>
+        <p><span class="label">Sfida</span>[Una riga sulla sfida.]</p>
+        <p><span class="label">Intervento</span>[Cosa è stato costruito.]</p>
+        <p class="outcome">[Esito in grande.]</p>
+        <p class="stack">[Tecnologia · Tecnologia]</p>
+      </article>
+      <article class="work">
+        <div class="work__top">
+          <p class="kicker">[Categoria · ambito]</p>
+          <span class="badge">[Badge]</span>
         </div>
-      </div>
-    </article>
-
-  </div>
-
-  <section class="domainbg" aria-labelledby="about-title">
-    <h2 id="about-title">[Titolo sezione di approfondimento]</h2>
-    <p>[Paragrafo di testo.]</p>
-    <p>[Paragrafo di testo.]</p>
+        <h3>[Nome del progetto]</h3>
+        <p><span class="label">Sfida</span>[Una riga sulla sfida.]</p>
+        <p><span class="label">Intervento</span>[Cosa è stato costruito.]</p>
+        <p class="outcome">[Esito in grande.]</p>
+        <p class="stack">[Tecnologia · Tecnologia]</p>
+        <a class="more" href="#" target="_blank" rel="noopener">[Link al progetto] <span aria-hidden="true">↗</span></a>
+      </article>
+    </div>
   </section>
 
-  <footer>
-    <span>[Voce]: <a href="#">[link]</a></span>
-    <span>[Voce]: <a href="#">[link]</a></span>
-  </footer>
-</div>
+  <section id="chi-sono" class="container reveal" aria-labelledby="chi-sono-title">
+    <div class="section-head">
+      <p class="kicker">Chi sono</p>
+      <h2 id="chi-sono-title">[Domanda di sezione?]</h2>
+    </div>
+    <div class="about">
+      <div class="about__photo" role="img" aria-label="[Ritratto]">F.</div>
+      <div class="prose">
+        <p>[Paragrafo di presentazione.]</p>
+        <p>[Paragrafo di presentazione.]</p>
+        <div class="links">
+          <a href="#">[Link]</a>
+          <a href="#">[Link]</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="scrittura" class="container reveal" aria-labelledby="scrittura-title">
+    <div class="section-head">
+      <p class="kicker">Scrittura</p>
+      <h2 id="scrittura-title">[Domanda di sezione?]</h2>
+    </div>
+    <ul class="writing">
+      <li>
+        <a href="#">
+          <span class="caption">[Data o testata]</span>
+          <h3>[Titolo dell'articolo]</h3>
+        </a>
+      </li>
+      <li>
+        <div class="soon">
+          <span class="caption">In arrivo</span>
+          <h3>[Titolo dell'articolo]</h3>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <section id="faq" class="container reveal" aria-labelledby="faq-title">
+    <div class="section-head">
+      <p class="kicker">Domande</p>
+      <h2 id="faq-title">[Domanda di sezione?]</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary>[Domanda?]</summary>
+        <p>[Risposta.]</p>
+      </details>
+      <details>
+        <summary>[Domanda?]</summary>
+        <p>[Risposta.]</p>
+      </details>
+      <details>
+        <summary>[Domanda?]</summary>
+        <p>[Risposta.]</p>
+      </details>
+    </div>
+  </section>
+
+  <section id="contatto" class="container contact reveal" aria-labelledby="contatto-title">
+    <p class="kicker">Contatto</p>
+    <h2 id="contatto-title">[Domanda di sezione?]</h2>
+    <p class="prose">[Invito a scrivere, in due righe.]</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="#">[Scrivimi] <span aria-hidden="true">→</span></a>
+      <a class="btn btn-secondary" href="#">[Link] <span aria-hidden="true">→</span></a>
+    </div>
+    <p class="caption">[Riga finale a bassa frizione.]</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>Frau Studio · [P.IVA] · [Città] · © 2026</p>
+    <p>[Riga di voce.]</p>
+  </div>
+</footer>
+
+<script>
+  // Fade-in-up delle sezioni, una volta sola (threshold 0.2)
+  (function () {
+    var items = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      items.forEach(function (el) { el.classList.add("is-visible"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add("is-visible"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.2 });
+    items.forEach(function (el) { io.observe(el); });
+  })();
+</script>
 </body>
 </html>
