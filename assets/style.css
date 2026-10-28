@@ -1246,3 +1246,84 @@ html {
   margin-top: auto;
   padding-top: 20px;
 }
+
+/* ---------------------------------------------------------------------
+   NAVBAR BLU — scelta esplicita per fraustudio (deroga a DESIGN.md, che
+   limita l'accento a link e CTA): fondo --accent, testi e contrasti bianchi.
+   --------------------------------------------------------------------- */
+.site-header,
+.site-header.is-scrolled {
+  background: var(--accent);
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.site-header .wordmark,
+.site-header .site-nav__link,
+.site-header .menu-toggle {
+  color: #fff;
+}
+
+.site-header .site-nav__link:hover {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+}
+
+/* La CTA su fondo blu si inverte: bianca con testo blu. */
+.site-header .site-header__cta.btn-primary,
+.mobile-menu .btn-primary {
+  background: #fff;
+  color: var(--accent);
+}
+
+.site-header .site-header__cta.btn-primary:hover,
+.mobile-menu .btn-primary:hover {
+  background: color-mix(in srgb, #fff 85%, var(--accent));
+  color: var(--accent-ink);
+}
+
+.site-header :focus-visible,
+.mobile-menu :focus-visible {
+  outline-color: #fff;
+}
+
+/* Menu mobile coerente con la barra: blu, voci bianche. */
+.mobile-menu {
+  background: var(--accent);
+}
+
+.mobile-menu .wordmark,
+.mobile-menu .menu-toggle,
+.mobile-menu__link,
+.mobile-menu__link:hover {
+  color: #fff;
+}
+
+.mobile-menu__link:hover {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+}
+
+/* ---- Ritratto in Chi sono ---- */
+img.about__photo {
+  display: block;
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+}
+
+@media (max-width: 767px) {
+  img.about__photo {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+/* ---- Footer senza riga di voce ---- */
+.site-footer__meta:first-child {
+  margin-top: 0;
+}
