@@ -1221,3 +1221,15 @@ html {
 .case-study__points strong {
   font-weight: 600;
 }
+
+/* ---- Card lavori: tutta la card apre il caso ----
+   Nel portfolio i figli stanno sopra lo stretched link (z-index 2), quindi il clic
+   sul testo non apriva nulla. I clic attraversano il contenuto; il link esterno
+   resta cliccabile da solo. */
+.work-card > *:not(.work-card__stretched-link) {
+  pointer-events: none;
+}
+
+.work-card .work-card__external {
+  pointer-events: auto;
+}

@@ -16,6 +16,8 @@ ROOT = Path(__file__).resolve().parent.parent
 SITE_URL = "https://fraustudio.com"
 EMAIL = "alessandro.frau88@gmail.com"
 GITHUB = "https://github.com/Aleczf"
+LINKEDIN = "https://www.linkedin.com/in/alessandro-frau-095b60153/"
+VAT = "14815310967"
 
 META = {
     "title": "Frau Studio — Alessandro Frau, AI Process Engineering",
@@ -82,9 +84,9 @@ WORKS = {
     "view_case": "Leggi il caso",
     "cases": [
         {
-            "slug": "vas-3",
+            "slug": "controllo-costi-ristorante",
             "badge": "CLIENTE REALE", "filled": True, "note": "in produzione",
-            "name": "VAS 3",
+            "name": "Controllo costi per un ristorante",
             "category": "Ristorazione · Controllo di gestione · AI",
             "challenge": "Un ristorante affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano fatture tra food, no-food e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di alimenti e bevande: i dati c'erano, chiusi negli XML delle fatture elettroniche.",
             "intervention": "Sono entrato nel processo e ho costruito un sistema che legge le fatture FatturaPA, classifica ogni riga per centro di costo e mostra costi e margine in una dashboard, dentro gli strumenti che il cliente già usava — così può mantenerlo senza dipendere da me. Un modello linguistico classifica solo i prodotti nuovi; gli altri arrivano dal catalogo. I limiti di Apps Script sono diventati scelte di progetto:",
@@ -94,7 +96,7 @@ WORKS = {
                 ("Le quote spingono al riuso.", "Più cresce il catalogo, meno chiamate al modello e classificazioni sempre coerenti."),
                 ("Nessun server.", "Tutto resta nell'account Google del cliente, a costo quasi nullo."),
             ],
-            "outcome": "Classificazione automatica in produzione, a costo quasi nullo.",
+            "outcome": "Circa 4 ore a settimana recuperate. Classificazione automatica in produzione.",
             "stack": "Google Apps Script · Google Sheets · Google Drive · Claude API",
         },
         {
@@ -272,7 +274,7 @@ ABOUT = {
         "Ho lavorato anche come tester su app e dispositivi mobili per piattaforme di crowdtesting internazionali. Da lì viene un'abitudine che porto in ogni progetto: chiedermi come un sistema si può rompere prima di consegnarlo.",
         "Mi sono formato da autodidatta su sviluppo full-stack e AI, e in project management. Ho anche fondato WineGuard, un progetto deep-tech di autenticazione ottica per il vino, in fase di tutela della proprietà intellettuale. Lavoro dentro i progetti di agenzie e software house, oppure direttamente con le PMI. Vivo e lavoro a Milano, in ibrido o da remoto; parlo italiano, inglese e francese.",
     ],
-    "links": [("GitHub", GITHUB)],
+    "links": [("GitHub", GITHUB), ("LinkedIn", LINKEDIN)],
 }
 
 WRITING = {
@@ -308,7 +310,7 @@ CONTACT = {
 
 FOOTER = {
     "voice": "I concept sono inventati. Il codice è vero.",
-    "meta": ["Frau Studio · Alessandro Frau", "Milano", "© 2026"],
+    "meta": ["Frau Studio · Alessandro Frau", f"P.IVA {VAT}", "Milano", "© 2026"],
 }
 
 NOT_FOUND = {"title": "Questa pagina non esiste.", "body": "Il metodo sì.", "cta": "Torna alla home"}
@@ -535,11 +537,11 @@ def person_jsonld():
         "@type": "Person",
         "name": "Alessandro Frau",
         "jobTitle": "AI Process Engineer",
-        "worksFor": {"@type": "Organization", "name": "Frau Studio", "url": SITE_URL},
+        "worksFor": {"@type": "Organization", "name": "Frau Studio", "url": SITE_URL, "vatID": f"IT{VAT}"},
         "url": SITE_URL,
         "email": EMAIL,
         "address": {"@type": "PostalAddress", "addressLocality": "Milano", "addressCountry": "IT"},
-        "sameAs": [GITHUB],
+        "sameAs": [GITHUB, LINKEDIN],
     }
     return json.dumps(data, ensure_ascii=False)
 
@@ -633,6 +635,7 @@ def home():
     contact = section("contatto", CONTACT["kicker"], CONTACT["question"], f"""      <p class="prose-measure contact__body">{e(CONTACT["body"])}</p>
       <div class="contact__links">
         <a href="mailto:{EMAIL}" class="contact__link contact__link--primary">Email: {EMAIL}</a>
+        <a href="{LINKEDIN}" class="contact__link">LinkedIn</a>
         <a href="{GITHUB}" class="contact__link">GitHub</a>
       </div>
       <p class="contact__closing caption">{e(CONTACT["closing"])}</p>""")
