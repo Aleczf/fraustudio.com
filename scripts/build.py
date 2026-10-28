@@ -27,7 +27,7 @@ UMAMI_SRC = "https://stats.fraustudio.com/script.js"
 UMAMI_WEBSITE_ID = ""
 
 META = {
-    "title": "Frau Studio — Alessandro Frau, AI Process Engineering",
+    "title": "Frau Studio · Alessandro Frau, AI Process Engineering",
     "description": "Entro nei processi delle PMI e costruisco l'automazione che serve: integrazioni su misura, Odoo, dashboard con AI e agenti WhatsApp. Milano, ibrido o remoto.",
 }
 
@@ -45,7 +45,7 @@ NAV = {
 
 HERO = {
     "lines": ["Non un'agenzia.", "Non un dipendente.", "Non il solito freelance."],
-    "sub": "Entro nei processi della tua azienda e costruisco l'automazione che serve — in giorni, non in trimestri. Analisi sul campo, AI dove conviene davvero, soluzioni che il tuo team sa mantenere.",
+    "sub": "Entro nei processi della tua azienda e costruisco l'automazione che serve, in giorni e non in trimestri. Analisi sul campo, AI dove conviene davvero, soluzioni che il tuo team sa mantenere.",
     "cta_primary": "Descrivimi un processo →",
     "cta_primary_href": "/#contatto",
     "cta_secondary": "Guarda come lavoro",
@@ -59,7 +59,7 @@ METHOD = {
     "intro": "Tre fasi, sempre le stesse. Cambia solo il tuo processo.",
     "phases": [
         ("01", "Entro", "Mi siedo dove il lavoro succede davvero: il gestionale, le email, il foglio Excel delle 18:30. Otto anni nelle brigate di cucine stellate mi hanno insegnato a leggere i sistemi di produzione sotto pressione: flussi, colli di bottiglia, cosa si rompe e perché."),
-        ("02", "Capisco", "Identifico dove l'automazione e l'AI convengono davvero — e dove no. Non ogni processo va automatizzato: alcuni vanno semplificati, altri lasciati alle persone. La diagnosi è il prodotto, non un preambolo."),
+        ("02", "Capisco", "Identifico dove l'automazione e l'AI convengono davvero, e dove no. Non ogni processo va automatizzato: alcuni vanno semplificati, altri lasciati alle persone. La diagnosi è il prodotto, non un preambolo."),
         ("03", "Costruisco", "Sviluppo la soluzione su misura, dentro gli strumenti che già usi, e te la consegno in modo che il tuo team possa mantenerla. Quello che richiedeva quattro fornitori e mesi, oggi è una persona e qualche settimana."),
     ],
     "engagement_closing": "Mi ingaggi in tre modi:",
@@ -96,7 +96,7 @@ WORKS = {
             "name": "Controllo costi per un ristorante",
             "category": "Ristorazione · Controllo di gestione · AI",
             "challenge": "Un ristorante affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano fatture tra food, no-food e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di alimenti e bevande: i dati c'erano, chiusi negli XML delle fatture elettroniche.",
-            "intervention": "Sono entrato nel processo e ho costruito un sistema che legge le fatture FatturaPA, classifica ogni riga per centro di costo e mostra costi e margine in una dashboard, dentro gli strumenti che il cliente già usava — così può mantenerlo senza dipendere da me. Un modello linguistico classifica solo i prodotti nuovi; gli altri arrivano dal catalogo. I limiti di Apps Script sono diventati scelte di progetto:",
+            "intervention": "Sono entrato nel processo e ho costruito un sistema che legge le fatture FatturaPA, classifica ogni riga per centro di costo e mostra costi e margine in una dashboard, dentro gli strumenti che il cliente già usava, così può mantenerlo senza dipendere da me. Un modello linguistico classifica solo i prodotti nuovi; gli altri arrivano dal catalogo. I limiti di Apps Script sono diventati scelte di progetto:",
             "points": [
                 ("Il foglio non è il database.", "La fonte della verità sono gli XML su Drive: il foglio si ricostruisce da zero in qualsiasi momento."),
                 ("Il limite di tempo diventa un lotto.", "La ricostruzione procede a blocchi, così anche anni di fatture non si interrompono a metà."),
@@ -256,7 +256,7 @@ WORKS = {
             "name": "NOLO HUB",
             "category": "Piattaforma editoriale · Sistema agentico",
             "challenge": "Il mondo no/low alcohol cresce, ma in Italia nessuno lo racconta con profondità gastronomica.",
-            "intervention": "Sto costruendo una piattaforma editoriale AI-native: pipeline di contenuto orchestrata da agenti con supervisione umana — gli agenti producono, le persone decidono. Architettura: nessun agente è mai responsabile ultimo; lo è sempre un umano.",
+            "intervention": "Sto costruendo una piattaforma editoriale AI-native: pipeline di contenuto orchestrata da agenti con supervisione umana: gli agenti producono, le persone decidono. Architettura: nessun agente è mai responsabile ultimo; lo è sempre un umano.",
             "outcome": "Il mio laboratorio a cielo aperto: quello che imparo qui finisce nei progetti dei clienti.",
             "stack": "Astro · TypeScript · n8n · Notion",
         },
@@ -265,7 +265,7 @@ WORKS = {
             "badge": "STRUMENTO INTERNO", "note": "in avvio",
             "name": "Cold outreach a costo quasi nullo",
             "category": "Lead generation B2B · Automazione",
-            "challenge": "Lo stack tipico per trovare e contattare aziende costa 100–150 € al mese tra abbonamenti diversi.",
+            "challenge": "Lo stack tipico per trovare e contattare aziende costa 100-150 € al mese tra abbonamenti diversi.",
             "intervention": "Una pipeline che sostituisce tre abbonamenti con codice proprio, eseguita su job programmati. È pronta e in fase di avvio.",
             "points": [
                 ("Ricerca delle aziende.", "Le attività di un territorio e di un settore arrivano dalla API di Google Places, al posto dei database a pagamento."),
@@ -273,7 +273,7 @@ WORKS = {
                 ("Esecuzione senza server.", "I job girano su GitHub Actions a orari fissi: niente macchina da mantenere accesa."),
                 ("Reputazione protetta.", "Gli invii partono da un dominio dedicato, separato da quello principale, così un problema di consegna non tocca la posta di lavoro."),
             ],
-            "outcome": "Da 100–150 € a 3–5 € al mese, stimati.",
+            "outcome": "Da 100-150 € a 3-5 € al mese, stimati.",
             "stack": "Node.js · GitHub Actions · Google Places API · Claude API · Zoho Mail",
         },
     ],
@@ -284,9 +284,9 @@ ABOUT = {
     "question": "Chi c'è dietro?",
     "photo_alt": "Ritratto di Alessandro Frau",
     "paragraphs": [
-        "Sono Alessandro, e Frau Studio sono io. Prima di scrivere codice ho passato otto anni nelle cucine e nelle sale di ristoranti stellati, e sono sommelier AIS. In una brigata impari a leggere un sistema di produzione sotto pressione — flussi, ruoli, colli di bottiglia, cosa cede per primo quando il ritmo sale. È esattamente quello che faccio oggi nelle aziende: solo che ora, dopo la diagnosi, la soluzione la costruisco anch'io.",
+        "Sono Alessandro, e Frau Studio sono io. Prima di scrivere codice ho passato otto anni nelle cucine e nelle sale di ristoranti stellati, e sono sommelier AIS. In una brigata impari a leggere un sistema di produzione sotto pressione: flussi, ruoli, colli di bottiglia, cosa cede per primo quando il ritmo sale. È esattamente quello che faccio oggi nelle aziende: solo che ora, dopo la diagnosi, la soluzione la costruisco anch'io.",
         "Ho lavorato anche come tester su app e dispositivi mobili per piattaforme di crowdtesting internazionali. Da lì viene un'abitudine che porto in ogni progetto: chiedermi come un sistema si può rompere prima di consegnarlo.",
-        "Mi sono formato da autodidatta su sviluppo full-stack e AI, e in project management. Ho anche fondato WineGuard, un progetto deep-tech di autenticazione ottica per il vino, in fase di tutela della proprietà intellettuale. Lavoro dentro i progetti di agenzie e software house, oppure direttamente con le PMI. Vivo e lavoro a Milano, in ibrido o da remoto; parlo italiano, inglese e francese.",
+        "Sviluppo full-stack e AI sono il mio lavoro di tutti i giorni: li ho messi alla prova costruendo sistemi che oggi girano presso clienti reali, e gestisco i progetti dall'analisi alla consegna. Ho anche fondato WineGuard, un progetto deep-tech di autenticazione ottica per il vino, in fase di tutela della proprietà intellettuale. Lavoro dentro i progetti di agenzie e software house, oppure direttamente con le PMI. Vivo e lavoro a Milano, in ibrido o da remoto; parlo italiano, inglese e francese.",
     ],
     "links": [("GitHub", GITHUB), ("LinkedIn", LINKEDIN)],
 }
@@ -306,10 +306,10 @@ FAQ = {
     "kicker": "FAQ",
     "question": "Cosa mi chiedono più spesso?",
     "items": [
-        ("Che differenza c'è tra te e un'agenzia di automazione?", "Un'agenzia ti vende il suo pacchetto. Io entro nel tuo processo, capisco cosa serve davvero — a volte è meno di quello che pensavi — e costruisco solo quello. E resto una persona sola: chi diagnostica è chi costruisce."),
+        ("Che differenza c'è tra te e un'agenzia di automazione?", "Un'agenzia ti vende il suo pacchetto. Io entro nel tuo processo, capisco cosa serve davvero (a volte è meno di quello che pensavi) e costruisco solo quello. E resto una persona sola: chi diagnostica è chi costruisce."),
         ("Lavori anche con agenzie e software house?", "Sì. Entro nei progetti di altri team per la parte Odoo, integrazioni e AI, oppure lavoro direttamente con il cliente. Il metodo è lo stesso: capire come l'azienda lavora davvero, scegliere lo strumento più semplice che regge, collegarlo a quello che c'è già."),
         ('Cosa significa "fractional"?', "Presenza continuativa part-time: un numero di ore o giornate al mese concordato, dentro il tuo team, senza il costo e il vincolo di un'assunzione. Mi prendi per il problema, non a tempo pieno."),
-        ("Lavori con Odoo e con i gestionali che uso già?", "Sì. Su Odoo sviluppo moduli personalizzati, lo configuro e migro i dati da ERP proprietari. Se usi già un altro gestionale, un CRM o un e-commerce, lo collego via API agli altri strumenti — fatture elettroniche, WhatsApp, piattaforme di settore — con scritture senza doppioni e riallineamenti automatici. Spesso non serve cambiare sistema: serve farli parlare tra loro."),
+        ("Lavori con Odoo e con i gestionali che uso già?", "Sì. Su Odoo sviluppo moduli personalizzati, lo configuro e migro i dati da ERP proprietari. Se usi già un altro gestionale, un CRM o un e-commerce, lo collego via API agli altri strumenti (fatture elettroniche, WhatsApp, piattaforme di settore) con scritture senza doppioni e riallineamenti automatici. Spesso non serve cambiare sistema: serve farli parlare tra loro."),
         ("Che tecnologie usi?", "Le più semplici che reggono il tuo caso. A volte è un foglio Google potenziato con AI, a volte un agente su WhatsApp, a volte Odoo o un'applicazione completa. La tecnologia è una conseguenza della diagnosi, mai il punto di partenza."),
         ("Quanto costa?", "Dipende dal problema, non dal mio umore: dopo una prima conversazione ti do un prezzo chiuso o una tariffa chiara, con la manutenzione esplicitata a parte. Niente sorprese a consuntivo."),
     ],
@@ -318,7 +318,7 @@ FAQ = {
 CONTACT = {
     "kicker": "CONTATTO",
     "question": "Che processo ti rallenta?",
-    "body": "Descrivimelo in due righe. Ti dico come lo automatizzerei — e se non conviene automatizzarlo, ti dico anche quello.",
+    "body": "Descrivimelo in due righe. Ti dico come lo automatizzerei. E se non conviene automatizzarlo, ti dico anche quello.",
     "closing": "30 minuti sul tuo processo, senza impegno.",
 }
 
@@ -537,9 +537,9 @@ def work_card(work):
     external = ""
     if work.get("external"):
         href, label = work["external"]
-        external = f'\n            <a href="{href}" target="_blank" rel="noopener noreferrer" class="work-card__external" aria-label="{e(label)} — apri in nuova scheda">{e(label)} <span aria-hidden="true">&#8599;</span></a>'
+        external = f'\n            <a href="{href}" target="_blank" rel="noopener noreferrer" class="work-card__external" aria-label="{e(label)}, apri in nuova scheda">{e(label)} <span aria-hidden="true">&#8599;</span></a>'
     return f"""        <div class="card work-card">
-          <a href="{case_href(work)}" class="work-card__stretched-link" aria-label="{e(work["name"])} — {e(WORKS["view_case"])}"></a>
+          <a href="{case_href(work)}" class="work-card__stretched-link" aria-label="{e(work["name"])}: {e(WORKS["view_case"])}"></a>
           {badge(work)}
           <p class="kicker work-card__category">{e(work["category"])}</p>
           <h3 class="work-card__name">{e(work["name"])}</h3>
@@ -718,7 +718,7 @@ def case_page(work):
   </div>
 </main>
 """
-    return page(f"{work['name']} — Frau Studio", work["challenge"], case_href(work), main)
+    return page(f"{work['name']} · Frau Studio", work["challenge"], case_href(work), main)
 
 
 def not_found():
@@ -730,7 +730,7 @@ def not_found():
   <a href="/" class="btn btn-secondary"><span class="btn-arrow" aria-hidden="true">&larr;</span><span class="btn-label">{e(NOT_FOUND["cta"])}</span></a>
 </main>
 """
-    return page(f"{NOT_FOUND['title']} — Frau Studio", NOT_FOUND["body"], "/404.html", main)
+    return page(f"{NOT_FOUND['title']} · Frau Studio", NOT_FOUND["body"], "/404.html", main)
 
 
 def privacy():
