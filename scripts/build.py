@@ -279,7 +279,6 @@ ABOUT = {
     "kicker": "CHI SONO",
     "question": "Chi c'è dietro?",
     "photo_alt": "Ritratto di Alessandro Frau",
-    "photo_placeholder": "A.",
     "paragraphs": [
         "Sono Alessandro, e Frau Studio sono io. Prima di scrivere codice ho passato otto anni nelle cucine e nelle sale di ristoranti stellati, e sono sommelier AIS. In una brigata impari a leggere un sistema di produzione sotto pressione — flussi, ruoli, colli di bottiglia, cosa cede per primo quando il ritmo sale. È esattamente quello che faccio oggi nelle aziende: solo che ora, dopo la diagnosi, la soluzione la costruisco anch'io.",
         "Ho lavorato anche come tester su app e dispositivi mobili per piattaforme di crowdtesting internazionali. Da lì viene un'abitudine che porto in ogni progetto: chiedermi come un sistema si può rompere prima di consegnarlo.",
@@ -306,7 +305,7 @@ FAQ = {
         ("Che differenza c'è tra te e un'agenzia di automazione?", "Un'agenzia ti vende il suo pacchetto. Io entro nel tuo processo, capisco cosa serve davvero — a volte è meno di quello che pensavi — e costruisco solo quello. E resto una persona sola: chi diagnostica è chi costruisce."),
         ("Lavori anche con agenzie e software house?", "Sì. Entro nei progetti di altri team per la parte Odoo, integrazioni e AI, oppure lavoro direttamente con il cliente. Il metodo è lo stesso: capire come l'azienda lavora davvero, scegliere lo strumento più semplice che regge, collegarlo a quello che c'è già."),
         ('Cosa significa "fractional"?', "Presenza continuativa part-time: un numero di ore o giornate al mese concordato, dentro il tuo team, senza il costo e il vincolo di un'assunzione. Mi prendi per il problema, non a tempo pieno."),
-        ("Lavori solo nel food & beverage?", "No. Il metodo vale per qualsiasi azienda con processi ripetitivi: amministrazione, vendite, operations. Il food è dove ho vissuto più a lungo, quindi lì ho una marcia in più — ma i processi si somigliano più di quanto sembri."),
+        ("Lavori con Odoo e con i gestionali che uso già?", "Sì. Su Odoo sviluppo moduli personalizzati, lo configuro e migro i dati da ERP proprietari. Se usi già un altro gestionale, un CRM o un e-commerce, lo collego via API agli altri strumenti — fatture elettroniche, WhatsApp, piattaforme di settore — con scritture senza doppioni e riallineamenti automatici. Spesso non serve cambiare sistema: serve farli parlare tra loro."),
         ("Che tecnologie usi?", "Le più semplici che reggono il tuo caso. A volte è un foglio Google potenziato con AI, a volte un agente su WhatsApp, a volte Odoo o un'applicazione completa. La tecnologia è una conseguenza della diagnosi, mai il punto di partenza."),
         ("Quanto costa?", "Dipende dal problema, non dal mio umore: dopo una prima conversazione ti do un prezzo chiuso o una tariffa chiara, con la manutenzione esplicitata a parte. Niente sorprese a consuntivo."),
     ],
@@ -320,7 +319,6 @@ CONTACT = {
 }
 
 FOOTER = {
-    "voice": "I concept sono inventati. Il codice è vero.",
     "meta": ["Frau Studio · Alessandro Frau", f"P.IVA {VAT}", "Milano", "© 2026"],
 }
 
@@ -415,7 +413,6 @@ def footer():
     return f"""
 <footer class="site-footer">
   <div class="container">
-    <p class="site-footer__voice">{e(FOOTER["voice"])}</p>
     <div class="site-footer__meta">
 {meta}
     </div>
@@ -615,7 +612,7 @@ def home():
     about_p = "\n".join(f'          <p class="prose-measure">{e(p)}</p>' for p in ABOUT["paragraphs"])
     about_links = "\n".join(f'            <a href="{h}" class="about__link">{e(l)} <span aria-hidden="true">&rarr;</span></a>' for l, h in ABOUT["links"])
     about = section("chi-sono", ABOUT["kicker"], ABOUT["question"], f"""      <div class="about__layout">
-        <div class="about__photo" role="img" aria-label="{e(ABOUT["photo_alt"])}"><span aria-hidden="true">{e(ABOUT["photo_placeholder"])}</span></div>
+        <img class="about__photo" src="/assets/alessandro-frau.webp" alt="{e(ABOUT["photo_alt"])}" width="800" height="800" loading="lazy" decoding="async">
         <div class="about__content">
 {about_p}
           <div class="about__links">
