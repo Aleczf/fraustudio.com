@@ -1,0 +1,18 @@
+name = "fraustudio-contatto"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+MAIL_TO = "alessandro.frau88@gmail.com"
+MAIL_FROM = "Frau Studio <onboarding@resend.dev>"
+ALLOWED_ORIGINS = "https://fraustudio.com,https://www.fraustudio.com"
+SITE_URL = "https://fraustudio.com"
+
+# Massimo 5 invii al minuto per IP.
+[[ratelimits]]
+name = "CONTACT_LIMITER"
+namespace_id = "1001"
+
+  [ratelimits.simple]
+  limit = 5
+  period = 60
