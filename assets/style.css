@@ -1445,3 +1445,4 @@ img.about__photo {
 .site-footer__meta a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .privacy__updated { margin-top: 12px; color: var(--muted); }
 .privacy__heading { font-size: 1.25rem; margin-bottom: 10px; }
+@media (min-width: 1000px) { .works__grid--3 { grid-template-columns: repeat(3, 1fr); } }

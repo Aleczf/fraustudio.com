@@ -755,7 +755,7 @@ def home():
           <h3 class="works__group-title">{e(title)}</h3>
           <p class="works__group-desc">{e(desc)}</p>
         </div>
-        <div class="works__grid">
+        <div class="works__grid{" works__grid--3" if len(slugs) == 3 else ""}">
 {chr(10).join(work_card(case_by_slug(s)) for s in slugs)}
         </div>
       </div>""")
