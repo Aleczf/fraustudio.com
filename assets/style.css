@@ -1178,3 +1178,46 @@ html {
 .not-found .btn {
   margin-top: 32px;
 }
+
+/* ---------------------------------------------------------------------
+   AGGIUNTE FRAU STUDIO — elementi che il portfolio non ha
+   --------------------------------------------------------------------- */
+
+/* ---- Servizi: stesse card delle formule di ingaggio, griglia 2x2 ---- */
+.services__grid {
+  margin-top: 40px;
+  display: grid;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .services__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ---- About su più paragrafi ---- */
+.about__content p + p {
+  margin-top: 16px;
+}
+
+/* ---- Pagina caso: badge su riga propria e punti dell'intervento ---- */
+.case-study__badge {
+  margin-top: 32px;
+}
+
+.case-study__points {
+  margin-top: 20px;
+  padding-left: 1.2em;
+  list-style: disc;
+  display: grid;
+  gap: 12px;
+}
+
+.case-study__points li::marker {
+  color: var(--accent);
+}
+
+.case-study__points strong {
+  font-weight: 600;
+}
