@@ -15,11 +15,16 @@ import json
 
 ROOT = Path(__file__).resolve().parent.parent
 CSS_VERSION = hashlib.sha256((ROOT / "assets/style.css").read_bytes()).hexdigest()[:10]
+FONTS_VERSION = hashlib.sha256((ROOT / "assets/fonts.css").read_bytes()).hexdigest()[:10]
 SITE_URL = "https://fraustudio.com"
 EMAIL = "alessandro.frau88@gmail.com"
 GITHUB = "https://github.com/Aleczf"
 LINKEDIN = "https://www.linkedin.com/in/alessandro-frau-095b60153/"
 VAT = "14815310967"
+
+# Statistiche senza cookie (Umami sulla VPS). Finché UMAMI_WEBSITE_ID è vuoto lo script non viene caricato.
+UMAMI_SRC = "https://stats.fraustudio.com/script.js"
+UMAMI_WEBSITE_ID = ""
 
 META = {
     "title": "Frau Studio — Alessandro Frau, AI Process Engineering",
@@ -330,6 +335,12 @@ NOT_FOUND = {"title": "Questa pagina non esiste.", "body": "Il metodo sì.", "ct
 e = escape
 
 
+def analytics():
+    if not UMAMI_WEBSITE_ID:
+        return ""
+    return f'\n<script defer src="{UMAMI_SRC}" data-website-id="{UMAMI_WEBSITE_ID}" data-domains="fraustudio.com"></script>'
+
+
 def head(title, description, path):
     url = SITE_URL + path
     return f"""<!doctype html>
@@ -351,10 +362,10 @@ def head(title, description, path):
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v={CSS_VERSION}">
+<link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fraunces-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css?v={FONTS_VERSION}">
+<link rel="stylesheet" href="/assets/style.css?v={CSS_VERSION}">{analytics()}
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -409,6 +420,7 @@ def header():
 
 def footer():
     meta = "\n".join(f"      <span>{e(m)}</span>" for m in FOOTER["meta"])
+    meta += '\n      <span><a href="/privacy/">Privacy</a></span>'
     return f"""
 <footer class="site-footer">
   <div class="container">
@@ -461,6 +473,18 @@ SCRIPT = """
     toggle.addEventListener("click", openMenu);
     closeBtn.addEventListener("click", closeMenu);
     menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
+
+    // Statistiche: conta i clic che contano (email, WhatsApp, LinkedIn, GitHub). Solo se Umami è attivo.
+    document.addEventListener("click", function (ev) {
+      var a = ev.target.closest && ev.target.closest("a[href]");
+      if (!a || !window.umami) return;
+      var h = a.getAttribute("href");
+      var name = h.indexOf("mailto:") === 0 ? "clic-email"
+        : h.indexOf("wa.me") > -1 ? "clic-whatsapp-demo"
+        : h.indexOf("linkedin.com") > -1 ? "clic-linkedin"
+        : h.indexOf("github.com") > -1 ? "clic-github" : null;
+      if (name) window.umami.track(name);
+    });
 
     // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx). Soglia 0 e non 0.2:
     // con 12 card la sezione Lavori su telefono è alta più di 5 schermi e il 20% non entra mai.
@@ -709,8 +733,68 @@ def not_found():
     return page(f"{NOT_FOUND['title']} — Frau Studio", NOT_FOUND["body"], "/404.html", main)
 
 
+def privacy():
+    analytics_text = (
+        "Il sito usa Umami, uno strumento di statistica installato su un nostro server in Germania. "
+        "Non usa cookie e non raccoglie dati che identificano il visitatore: registra in forma aggregata "
+        "pagine visitate, sito di provenienza, tipo di dispositivo e i clic sui contatti. "
+        "Questi dati servono solo a capire quali contenuti sono utili."
+    ) if UMAMI_WEBSITE_ID else (
+        "Il sito non usa strumenti di statistica né cookie di profilazione."
+    )
+    blocks = [
+        ("Titolare del trattamento",
+         f"Alessandro Frau (Frau Studio), Milano, P.IVA {VAT}. Contatto per qualsiasi richiesta sulla privacy: {EMAIL}."),
+        ("Navigazione del sito",
+         "Il sito è ospitato da GitHub Pages (GitHub Inc.), che per motivi tecnici e di sicurezza registra "
+         "nei propri log l'indirizzo IP di chi lo visita. I font sono ospitati direttamente sul sito: "
+         "nessuna richiesta viene inviata a Google o ad altri servizi esterni. "
+         "Il sito non installa cookie, né tecnici né di profilazione: per questo non è presente un banner."),
+        ("Statistiche", analytics_text),
+        ("Contatti via email",
+         "Se mi scrivi, uso il tuo indirizzo e quello che mi racconti solo per risponderti e, se lo chiedi, "
+         "per preparare una proposta. Base giuridica: la tua richiesta e le misure precontrattuali "
+         "(art. 6.1.b GDPR). Conservo la corrispondenza per il tempo necessario alla trattativa e, se diventi "
+         "cliente, per gli obblighi di legge."),
+        ("Demo di Pico su WhatsApp",
+         "Se scrivi al numero della demo, Pico (un agente di intelligenza artificiale) tratta il tuo numero, "
+         "il nome del tuo profilo WhatsApp e i messaggi che invii, per farti provare il servizio e, se lo chiedi, "
+         "per ricontattarti. Base giuridica: la tua richiesta (art. 6.1.b GDPR). Le conversazioni della demo "
+         "vengono cancellate automaticamente 30 giorni dopo l'ultimo messaggio. "
+         "Per non ricevere più messaggi basta scrivere STOP."),
+        ("Fornitori che trattano i dati",
+         "Meta Platforms Ireland (WhatsApp Business Platform), per la consegna dei messaggi della demo. "
+         "Anthropic PBC, che fornisce il modello di intelligenza artificiale usato da Pico: i testi delle "
+         "conversazioni vengono elaborati sui suoi server negli Stati Uniti, sulla base delle clausole "
+         "contrattuali standard della Commissione europea, e non vengono usati per addestrare i modelli. "
+         "Hetzner Online GmbH (Germania), che ospita i server della demo e delle statistiche. "
+         "GitHub Inc., che ospita il sito."),
+        ("I tuoi diritti",
+         f"Puoi chiedere in qualsiasi momento di accedere ai tuoi dati, correggerli, cancellarli, limitarne "
+         f"il trattamento o opporti (artt. 15-22 GDPR), scrivendo a {EMAIL}. "
+         "Hai anche il diritto di presentare reclamo al Garante per la protezione dei dati personali "
+         "(garanteprivacy.it)."),
+    ]
+    body = "\n".join(
+        f"""      <section class="legal__block">
+        <h2>{e(t)}</h2>
+        <p class="prose-measure">{e(p)}</p>
+      </section>""" for t, p in blocks)
+    main = f"""
+<main class="legal">
+  <div class="container legal__inner">
+    <p class="kicker">Informativa</p>
+    <h1 class="legal__title">Privacy</h1>
+    <p class="caption">Ultimo aggiornamento: ottobre 2026</p>
+{body}
+  </div>
+</main>
+"""
+    return page("Privacy · Frau Studio", "Come Frau Studio tratta i dati di chi visita il sito, scrive o prova la demo di Pico.", "/privacy/", main)
+
+
 def sitemap():
-    urls = ["/"] + [case_href(w) for w in WORKS["cases"]]
+    urls = ["/"] + [case_href(w) for w in WORKS["cases"]] + ["/privacy/"]
     body = "\n".join(f"  <url><loc>{SITE_URL}{u}</loc></url>" for u in urls)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
 
@@ -725,6 +809,7 @@ def write(rel, text):
 if __name__ == "__main__":
     write("index.html", home())
     write("404.html", not_found())
+    write("privacy/index.html", privacy())
     for w in WORKS["cases"]:
         write(f"lavori/{w['slug']}/index.html", case_page(w))
     write("sitemap.xml", sitemap())

@@ -17,10 +17,10 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=a4e9590459">
+<link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fraunces-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css?v=d289be2e1e">
+<link rel="stylesheet" href="/assets/style.css?v=3c75e96718">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -111,6 +111,7 @@
       <span>P.IVA 14815310967</span>
       <span>Milano</span>
       <span>© 2026</span>
+      <span><a href="/privacy/">Privacy</a></span>
     </div>
   </div>
 </footer>
@@ -155,6 +156,18 @@
     toggle.addEventListener("click", openMenu);
     closeBtn.addEventListener("click", closeMenu);
     menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
+
+    // Statistiche: conta i clic che contano (email, WhatsApp, LinkedIn, GitHub). Solo se Umami è attivo.
+    document.addEventListener("click", function (ev) {
+      var a = ev.target.closest && ev.target.closest("a[href]");
+      if (!a || !window.umami) return;
+      var h = a.getAttribute("href");
+      var name = h.indexOf("mailto:") === 0 ? "clic-email"
+        : h.indexOf("wa.me") > -1 ? "clic-whatsapp-demo"
+        : h.indexOf("linkedin.com") > -1 ? "clic-linkedin"
+        : h.indexOf("github.com") > -1 ? "clic-github" : null;
+      if (name) window.umami.track(name);
+    });
 
     // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx). Soglia 0 e non 0.2:
     // con 12 card la sezione Lavori su telefono è alta più di 5 schermi e il 20% non entra mai.
