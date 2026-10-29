@@ -14,7 +14,7 @@ Riceve il form di fraustudio.com e inoltra ogni richiesta via email con [Resend]
    npx wrangler secret put RESEND_API_KEY
    ```
 
-3. Copia l'URL che `wrangler deploy` stampa (`https://fraustudio-contatto.<account>.workers.dev`)
+3. Copia l'URL che `wrangler deploy` stampa (`https://fraustudio-contatto.fraustudio.workers.dev`)
    in `FORM_ENDPOINT` dentro `scripts/build.py`, poi rigenera il sito con `python3 scripts/build.py`.
 
 ## Test

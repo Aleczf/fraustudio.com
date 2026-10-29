@@ -28,7 +28,7 @@ UMAMI_SRC = "https://stats.fraustudio.com/script.js"
 UMAMI_WEBSITE_ID = ""
 
 # Endpoint del Cloudflare Worker che riceve il modulo di contatto (cartella worker/).
-FORM_ENDPOINT = "https://fraustudio-contatto.REPLACE_ME.workers.dev"
+FORM_ENDPOINT = "https://fraustudio-contatto.fraustudio.workers.dev"
 # Link di prenotazione (Cal.com, Calendly...). Se None, il bottone apre una email precompilata.
 BOOKING_URL = None
 
