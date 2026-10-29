@@ -297,7 +297,6 @@ WRITING = {
     "soon_label": "In arrivo",
     # (titolo, href) — href None = "in arrivo"
     "cards": [
-        ("Liquid Gastronomy 2026", None),
     ],
 }
 
