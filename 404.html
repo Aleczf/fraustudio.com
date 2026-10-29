@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Questa pagina non esiste. — Frau Studio</title>
+<title>Questa pagina non esiste. · Frau Studio</title>
 <meta name="description" content="Il metodo sì.">
 <link rel="canonical" href="https://fraustudio.com/404.html">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="it_IT">
 <meta property="og:site_name" content="Frau Studio">
-<meta property="og:title" content="Questa pagina non esiste. — Frau Studio">
+<meta property="og:title" content="Questa pagina non esiste. · Frau Studio">
 <meta property="og:description" content="Il metodo sì.">
 <meta property="og:url" content="https://fraustudio.com/404.html">
 <meta property="og:image" content="https://fraustudio.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=f993a3ac01">
+<link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fraunces-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css?v=d289be2e1e">
+<link rel="stylesheet" href="/assets/style.css?v=c60aad29cd">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -133,6 +133,18 @@
     closeBtn.addEventListener("click", closeMenu);
     menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
 
+    // Statistiche: conta i clic che contano (email, WhatsApp, LinkedIn, GitHub). Solo se Umami è attivo.
+    document.addEventListener("click", function (ev) {
+      var a = ev.target.closest && ev.target.closest("a[href]");
+      if (!a || !window.umami) return;
+      var h = a.getAttribute("href");
+      var name = h.indexOf("mailto:") === 0 ? "clic-email"
+        : h.indexOf("wa.me") > -1 ? "clic-whatsapp-demo"
+        : h.indexOf("linkedin.com") > -1 ? "clic-linkedin"
+        : h.indexOf("github.com") > -1 ? "clic-github" : null;
+      if (name) window.umami.track(name);
+    });
+
     // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx). Soglia 0 e non 0.2:
     // con 12 card la sezione Lavori su telefono è alta più di 5 schermi e il 20% non entra mai.
     var items = document.querySelectorAll(".reveal");
@@ -147,7 +159,6 @@
     }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
     items.forEach(function (el) { io.observe(el); });
   })();
-
   // Modulo di contatto: invio al Cloudflare Worker senza ricaricare la pagina.
   (function () {
     var form = document.getElementById("contact-form");
@@ -178,10 +189,12 @@
         if (!r.ok) throw new Error(String(r.status));
         form.reset();
         show(MSG_SENT, false);
+        if (window.umami) window.umami.track("invio-modulo");
       }).catch(function () {
         show(MSG_ERROR + " " + EMAIL + ".", true);
       }).then(function () { button.disabled = false; });
     });
+    if (/[?&]inviato=1/.test(location.search)) show(MSG_SENT, false);
   })();
 </script>
 </body>

@@ -3,24 +3,24 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Controllo costi sulle fatture passive — Frau Studio</title>
-<meta name="description" content="Un&#x27;azienda affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano le fatture tra materie prime, materiali di consumo e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di ogni voce: i dati c&#x27;erano, chiusi negli XML delle fatture elettroniche.">
-<link rel="canonical" href="https://fraustudio.com/lavori/controllo-costi-fatture/">
+<title>Controllo costi per un ristorante · Frau Studio</title>
+<meta name="description" content="Un ristorante affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano fatture tra food, no-food e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di alimenti e bevande: i dati c&#x27;erano, chiusi negli XML delle fatture elettroniche.">
+<link rel="canonical" href="https://fraustudio.com/lavori/controllo-costi-ristorante/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="it_IT">
 <meta property="og:site_name" content="Frau Studio">
-<meta property="og:title" content="Controllo costi sulle fatture passive — Frau Studio">
-<meta property="og:description" content="Un&#x27;azienda affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano le fatture tra materie prime, materiali di consumo e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di ogni voce: i dati c&#x27;erano, chiusi negli XML delle fatture elettroniche.">
-<meta property="og:url" content="https://fraustudio.com/lavori/controllo-costi-fatture/">
+<meta property="og:title" content="Controllo costi per un ristorante · Frau Studio">
+<meta property="og:description" content="Un ristorante affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano fatture tra food, no-food e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di alimenti e bevande: i dati c&#x27;erano, chiusi negli XML delle fatture elettroniche.">
+<meta property="og:url" content="https://fraustudio.com/lavori/controllo-costi-ristorante/">
 <meta property="og:image" content="https://fraustudio.com/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v=f993a3ac01">
+<link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fraunces-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css?v=d289be2e1e">
+<link rel="stylesheet" href="/assets/style.css?v=c60aad29cd">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -77,17 +77,17 @@
   <div class="container case-study__inner">
     <a href="/#lavori" class="case-study__back">&larr; Cosa ho costruito?</a>
     <div class="case-study__badge"><span class="badge-group"><span class="badge badge--filled">CLIENTE REALE</span><span class="badge-note">in produzione</span></span></div>
-    <p class="kicker case-study__category">Controllo di gestione · Fatturazione elettronica · AI</p>
-    <h1 class="case-study__title">Controllo costi sulle fatture passive</h1>
+    <p class="kicker case-study__category">Ristorazione · Controllo di gestione · AI</p>
+    <h1 class="case-study__title">Controllo costi per un ristorante</h1>
 
     <dl class="case-study__body">
       <div class="case-study__block">
         <dt class="kicker">Sfida</dt>
-        <dd class="prose-measure">Un&#x27;azienda affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano le fatture tra materie prime, materiali di consumo e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di ogni voce: i dati c&#x27;erano, chiusi negli XML delle fatture elettroniche.</dd>
+        <dd class="prose-measure">Un ristorante affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano fatture tra food, no-food e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di alimenti e bevande: i dati c&#x27;erano, chiusi negli XML delle fatture elettroniche.</dd>
       </div>
       <div class="case-study__block">
         <dt class="kicker">Intervento</dt>
-        <dd class="prose-measure">Sono entrato nel processo e ho costruito un sistema che legge le fatture FatturaPA, classifica ogni riga per centro di costo e mostra costi e margine in una dashboard, dentro gli strumenti che il cliente già usava — così può mantenerlo senza dipendere da me. Un modello linguistico classifica solo i prodotti nuovi; gli altri arrivano dal catalogo. I limiti di Apps Script sono diventati scelte di progetto:
+        <dd class="prose-measure">Sono entrato nel processo e ho costruito un sistema che legge le fatture FatturaPA, classifica ogni riga per centro di costo e mostra costi e margine in una dashboard, dentro gli strumenti che il cliente già usava, così può mantenerlo senza dipendere da me. Un modello linguistico classifica solo i prodotti nuovi; gli altri arrivano dal catalogo. I limiti di Apps Script sono diventati scelte di progetto:
               <ul class="case-study__points">
                 <li><strong>Il foglio non è il database.</strong> La fonte della verità sono gli XML su Drive: il foglio si ricostruisce da zero in qualsiasi momento.</li>
                 <li><strong>Il limite di tempo diventa un lotto.</strong> La ricostruzione procede a blocchi, così anche anni di fatture non si interrompono a metà.</li>
@@ -164,6 +164,18 @@
     closeBtn.addEventListener("click", closeMenu);
     menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
 
+    // Statistiche: conta i clic che contano (email, WhatsApp, LinkedIn, GitHub). Solo se Umami è attivo.
+    document.addEventListener("click", function (ev) {
+      var a = ev.target.closest && ev.target.closest("a[href]");
+      if (!a || !window.umami) return;
+      var h = a.getAttribute("href");
+      var name = h.indexOf("mailto:") === 0 ? "clic-email"
+        : h.indexOf("wa.me") > -1 ? "clic-whatsapp-demo"
+        : h.indexOf("linkedin.com") > -1 ? "clic-linkedin"
+        : h.indexOf("github.com") > -1 ? "clic-github" : null;
+      if (name) window.umami.track(name);
+    });
+
     // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx). Soglia 0 e non 0.2:
     // con 12 card la sezione Lavori su telefono è alta più di 5 schermi e il 20% non entra mai.
     var items = document.querySelectorAll(".reveal");
@@ -178,7 +190,6 @@
     }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
     items.forEach(function (el) { io.observe(el); });
   })();
-
   // Modulo di contatto: invio al Cloudflare Worker senza ricaricare la pagina.
   (function () {
     var form = document.getElementById("contact-form");
@@ -209,10 +220,12 @@
         if (!r.ok) throw new Error(String(r.status));
         form.reset();
         show(MSG_SENT, false);
+        if (window.umami) window.umami.track("invio-modulo");
       }).catch(function () {
         show(MSG_ERROR + " " + EMAIL + ".", true);
       }).then(function () { button.disabled = false; });
     });
+    if (/[?&]inviato=1/.test(location.search)) show(MSG_SENT, false);
   })();
 </script>
 </body>

@@ -16,18 +16,24 @@ import json
 
 ROOT = Path(__file__).resolve().parent.parent
 CSS_VERSION = hashlib.sha256((ROOT / "assets/style.css").read_bytes()).hexdigest()[:10]
+FONTS_VERSION = hashlib.sha256((ROOT / "assets/fonts.css").read_bytes()).hexdigest()[:10]
 SITE_URL = "https://fraustudio.com"
 EMAIL = "alessandro.frau88@gmail.com"
 GITHUB = "https://github.com/Aleczf"
 LINKEDIN = "https://www.linkedin.com/in/alessandro-frau-095b60153/"
 VAT = "14815310967"
-# Endpoint del Cloudflare Worker che riceve il form (cartella worker/). Da aggiornare dopo il deploy.
+
+# Statistiche senza cookie (Umami sulla VPS). Finché UMAMI_WEBSITE_ID è vuoto lo script non viene caricato.
+UMAMI_SRC = "https://stats.fraustudio.com/script.js"
+UMAMI_WEBSITE_ID = ""
+
+# Endpoint del Cloudflare Worker che riceve il modulo di contatto (cartella worker/).
 FORM_ENDPOINT = "https://fraustudio-contatto.REPLACE_ME.workers.dev"
 # Link di prenotazione (Cal.com, Calendly...). Se None, il bottone apre una email precompilata.
 BOOKING_URL = None
 
 META = {
-    "title": "Frau Studio — Automazione e integrazioni per PMI · Alessandro Frau",
+    "title": "Frau Studio · Alessandro Frau, automazione e integrazioni per PMI",
     "description": "Collego i gestionali che usi già ed elimino il lavoro fatto due volte: integrazioni su misura, Odoo, dashboard con AI e agenti WhatsApp. Milano, in sede o da remoto.",
 }
 
@@ -60,8 +66,8 @@ METHOD = {
     "question": "Come lavoro?",
     "intro": "Tre fasi, sempre le stesse. Cambia solo il tuo processo.",
     "phases": [
-        ("01", "Entro", "Mi siedo dove il lavoro succede davvero: il gestionale, le email, il foglio Excel delle 18:30. Otto anni nelle brigate di cucine stellate mi hanno insegnato a leggere i sistemi di produzione sotto pressione: flussi, colli di bottiglia, cosa si rompe e perché."),
-        ("02", "Capisco", "Identifico dove l'automazione e l'AI convengono davvero — e dove no. Non ogni processo va automatizzato: alcuni vanno semplificati, altri lasciati alle persone. La diagnosi è il prodotto, non un preambolo."),
+        ("01", "Entro", "Mi siedo dove il lavoro succede davvero: il gestionale, le email, il foglio Excel delle 18:30. Prima di proporre qualcosa guardo come il processo regge sotto pressione: flussi, colli di bottiglia, cosa si rompe e perché."),
+        ("02", "Capisco", "Identifico dove l'automazione e l'AI convengono davvero, e dove no. Non ogni processo va automatizzato: alcuni vanno semplificati, altri lasciati alle persone. La diagnosi è il prodotto, non un preambolo."),
         ("03", "Costruisco", "Sviluppo la soluzione su misura, dentro gli strumenti che già usi, e te la consegno in modo che il tuo team possa mantenerla. Quello che richiedeva quattro fornitori e mesi, oggi è una persona e qualche settimana."),
     ],
     "engagement_closing": "Mi ingaggi in tre modi:",
@@ -86,29 +92,29 @@ SERVICES = {
 
 # Un caso: badge (+ nota), categoria, nome, sfida, intervento (+ punti), esito, stack, link esterno.
 # "filled": solo i lavori con un cliente reale hanno il badge pieno.
-# "lab": progetti miei, mostrati in forma compatta sotto i casi cliente.
-# "hidden": la pagina non viene generata e il caso non compare sul sito.
+# "lab": progetti miei, mostrati in forma compatta sotto i casi cliente ("lab_line" è la riga in homepage).
+# "hidden": il caso non compare sul sito e la sua pagina non viene generata.
 WORKS = {
     "kicker": "LAVORI",
     "question": "Cosa ho costruito?",
     "transparency": "Lavori per clienti reali, raggruppati per il problema che risolvono. Per ognuno è indicato dove si trova oggi il progetto.",
-    "view_case": "Leggi il caso",
     "groups": [
-        ("Togliere lavoro manuale", "Documenti e richieste che oggi qualcuno legge e smista a mano.", ["controllo-costi-fatture", "intake-studio-legale"]),
+        ("Togliere lavoro manuale", "Documenti e richieste che oggi qualcuno legge e smista a mano.", ["controllo-costi-ristorante", "intake-studio-legale"]),
         ("Far parlare i sistemi", "Lo stesso dato inserito in due posti, o sparso tra strumenti diversi.", ["odoo-cartsan", "crm-clinica"]),
         ("Cambiare o costruire il gestionale", "Quando lo strumento che c'è non basta più, o non c'è ancora.", ["migrazione-erp-odoo", "magazzino-filati", "gioielli-odoo"]),
     ],
     "lab_title": "Prodotti e laboratorio",
     "lab_desc": "Progetti miei: servono a provare il metodo prima di portarlo nei progetti dei clienti.",
+    "view_case": "Leggi il caso",
     "cases": [
         {
-            "slug": "controllo-costi-fatture",
-            "summary": "Ore ogni settimana a smistare a mano le fatture passive, senza sapere quanto pesasse davvero ogni voce di costo.",
+            "slug": "controllo-costi-ristorante",
+            "summary": "Ore ogni settimana a smistare a mano le fatture passive, senza sapere quanto pesassero davvero food e beverage.",
             "badge": "CLIENTE REALE", "filled": True, "note": "in produzione",
-            "name": "Controllo costi sulle fatture passive",
-            "category": "Controllo di gestione · Fatturazione elettronica · AI",
-            "challenge": "Un'azienda affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano le fatture tra materie prime, materiali di consumo e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di ogni voce: i dati c'erano, chiusi negli XML delle fatture elettroniche.",
-            "intervention": "Sono entrato nel processo e ho costruito un sistema che legge le fatture FatturaPA, classifica ogni riga per centro di costo e mostra costi e margine in una dashboard, dentro gli strumenti che il cliente già usava — così può mantenerlo senza dipendere da me. Un modello linguistico classifica solo i prodotti nuovi; gli altri arrivano dal catalogo. I limiti di Apps Script sono diventati scelte di progetto:",
+            "name": "Controllo costi per un ristorante",
+            "category": "Ristorazione · Controllo di gestione · AI",
+            "challenge": "Un ristorante affogava nella fatturazione passiva: ogni settimana, ore a smistare a mano fatture tra food, no-food e spese generali. E il titolare decideva gli acquisti senza conoscere il peso reale di alimenti e bevande: i dati c'erano, chiusi negli XML delle fatture elettroniche.",
+            "intervention": "Sono entrato nel processo e ho costruito un sistema che legge le fatture FatturaPA, classifica ogni riga per centro di costo e mostra costi e margine in una dashboard, dentro gli strumenti che il cliente già usava, così può mantenerlo senza dipendere da me. Un modello linguistico classifica solo i prodotti nuovi; gli altri arrivano dal catalogo. I limiti di Apps Script sono diventati scelte di progetto:",
             "points": [
                 ("Il foglio non è il database.", "La fonte della verità sono gli XML su Drive: il foglio si ricostruisce da zero in qualsiasi momento."),
                 ("Il limite di tempo diventa un lotto.", "La ricostruzione procede a blocchi, così anche anni di fatture non si interrompono a metà."),
@@ -121,8 +127,8 @@ WORKS = {
         {
             "slug": "pico",
             "lab": True,
-            "summary": "Nei CRM dormono contatti che hanno già chiesto un preventivo o comprato. Nessuno li ricontatta.",
             "lab_line": "Agente WhatsApp che ricontatta i lead fermi nel CRM. In produzione dal primo cliente.",
+            "summary": "Nei CRM dormono contatti che hanno già chiesto un preventivo o comprato. Nessuno li ricontatta.",
             "badge": "PRODOTTO", "note": "in produzione",
             "name": "Pico",
             "category": "Agente AI · WhatsApp · Riattivazione clienti",
@@ -132,7 +138,7 @@ WORKS = {
                 ("API ufficiali di Meta.", "Integrazione diretta con WhatsApp Cloud API, trascrizione dei vocali, stato delle conversazioni persistito."),
                 ("Architettura riusabile.", "La sto adattando a un secondo caso d'uso: la reportistica dei team sul campo."),
             ],
-            "outcome": "In produzione dal primo cliente, con vendite in crescita dai lead tornati attivi.",
+            "outcome": "Il primo cliente ha registrato un aumento delle vendite dai lead tornati attivi.",
             "stack": "Node.js · WhatsApp Cloud API · Claude API · SQLite · Whisper",
         },
         {
@@ -229,7 +235,7 @@ WORKS = {
             "intervention": "Un gestionale con carico dei filati dai documenti di trasporto e scarico per ordine, più una pagina ordini per capi fatti con fino a cinque filati.",
             "points": [
                 ("Il vincolo del lotto nel modello dati.", "Un ordine usa un solo lotto per colore, per evitare differenze di tinta: il sistema lo impone invece di affidarlo alla memoria di chi prepara l'ordine."),
-                ("MVP sullo stesso stack del prodotto finale,", "ripreso dal sistema di controllo costi sulle fatture passive. Quello che il cliente prova è quello che riceverà."),
+                ("MVP sullo stesso stack del prodotto finale,", "ripreso dal sistema di controllo costi per la ristorazione. Quello che il cliente prova è quello che riceverà."),
                 ("Manutenibile senza teleassistenza.", "È un requisito di progetto. In valutazione il passaggio a un database PostgreSQL ospitato, con preventivo separato per hosting e manutenzione."),
             ],
             "outcome": "Ogni capo tracciabile fino al filato e al suo lotto.",
@@ -238,8 +244,8 @@ WORKS = {
         {
             "slug": "fero",
             "lab": True,
-            "summary": "Vetrina, scelta assistita, contatti e back-office: di norma quattro fornitori e settimane di coordinamento.",
             "lab_line": "Vetrina, scelta assistita, contatti e back-office in un solo sistema, costruito in giorni.",
+            "summary": "Vetrina, scelta assistita, contatti e back-office: di norma quattro fornitori e settimane di coordinamento.",
             "badge": "CONCEPT DIMOSTRATIVO",
             "name": "FERØ",
             "category": "Sistema completo · AI · E-commerce",
@@ -252,8 +258,8 @@ WORKS = {
         {
             "slug": "wineguard",
             "lab": True,
-            "summary": "L'anticontraffazione per il vino chiede chip, RFID o etichette speciali che molte cantine non sostengono.",
             "lab_line": "Anticontraffazione per il vino con la sola fotocamera di uno smartphone.",
+            "summary": "L'anticontraffazione per il vino chiede chip, RFID o etichette speciali che molte cantine non sostengono.",
             "badge": "R&D", "note": "in test",
             "name": "WineGuard",
             "category": "Wine-tech · Anticontraffazione · Computer vision",
@@ -275,8 +281,8 @@ WORKS = {
             "badge": "IN COSTRUZIONE",
             "name": "NOLO HUB",
             "category": "Piattaforma editoriale · Sistema agentico",
-            "challenge": "Il mondo no/low alcohol cresce, ma in Italia nessuno lo racconta con profondità.",
-            "intervention": "Sto costruendo una piattaforma editoriale AI-native: pipeline di contenuto orchestrata da agenti con supervisione umana — gli agenti producono, le persone decidono. Architettura: nessun agente è mai responsabile ultimo; lo è sempre un umano.",
+            "challenge": "Il mondo no/low alcohol cresce, ma in Italia nessuno lo racconta con profondità gastronomica.",
+            "intervention": "Sto costruendo una piattaforma editoriale AI-native: pipeline di contenuto orchestrata da agenti con supervisione umana: gli agenti producono, le persone decidono. Architettura: nessun agente è mai responsabile ultimo; lo è sempre un umano.",
             "outcome": "Il mio laboratorio a cielo aperto: quello che imparo qui finisce nei progetti dei clienti.",
             "stack": "Astro · TypeScript · n8n · Notion",
         },
@@ -286,7 +292,7 @@ WORKS = {
             "badge": "STRUMENTO INTERNO", "note": "in avvio",
             "name": "Cold outreach a costo quasi nullo",
             "category": "Lead generation B2B · Automazione",
-            "challenge": "Lo stack tipico per trovare e contattare aziende costa 100–150 € al mese tra abbonamenti diversi.",
+            "challenge": "Lo stack tipico per trovare e contattare aziende costa 100-150 € al mese tra abbonamenti diversi.",
             "intervention": "Una pipeline che sostituisce tre abbonamenti con codice proprio, eseguita su job programmati. È pronta e in fase di avvio.",
             "points": [
                 ("Ricerca delle aziende.", "Le attività di un territorio e di un settore arrivano dalla API di Google Places, al posto dei database a pagamento."),
@@ -294,7 +300,7 @@ WORKS = {
                 ("Esecuzione senza server.", "I job girano su GitHub Actions a orari fissi: niente macchina da mantenere accesa."),
                 ("Reputazione protetta.", "Gli invii partono da un dominio dedicato, separato da quello principale, così un problema di consegna non tocca la posta di lavoro."),
             ],
-            "outcome": "Da 100–150 € a 3–5 € al mese, stimati.",
+            "outcome": "Da 100-150 € a 3-5 € al mese, stimati.",
             "stack": "Node.js · GitHub Actions · Google Places API · Claude API · Zoho Mail",
         },
     ],
@@ -319,9 +325,9 @@ ABOUT = {
     "question": "Chi c'è dietro?",
     "photo_alt": "Ritratto di Alessandro Frau",
     "paragraphs": [
-        "Sono Alessandro, e Frau Studio sono io. Prima di scrivere codice ho passato otto anni nelle cucine e nelle sale di ristoranti stellati, e sono sommelier AIS. In una brigata impari a leggere un sistema di produzione sotto pressione — flussi, ruoli, colli di bottiglia, cosa cede per primo quando il ritmo sale. È esattamente quello che faccio oggi nelle aziende: solo che ora, dopo la diagnosi, la soluzione la costruisco anch'io.",
-        "Dopo la cucina ho lavorato come sviluppatore full-stack, su applicazioni web, integrazioni e AI, e come QA tester su app e dispositivi mobili per piattaforme di crowdtesting internazionali. Dallo sviluppo viene il modo in cui costruisco; dal testing un'abitudine che porto in ogni progetto: chiedermi come un sistema si può rompere prima di consegnarlo.",
-        "Ho fondato WineGuard, un sistema di autenticazione ottica per il vino in fase di tutela della proprietà intellettuale. Lavoro direttamente con le PMI oppure dentro i progetti di agenzie e software house. Vivo e lavoro a Milano, in sede o da remoto; parlo italiano, inglese e francese.",
+        "Sono Alessandro, e Frau Studio sono io. Il mio lavoro parte sempre dallo stesso punto: capire come un'azienda funziona davvero, chi fa cosa, dove i flussi si inceppano e cosa cede per primo quando il ritmo sale. Poi, fatta la diagnosi, la soluzione la costruisco io.",
+        "Ho lavorato anche come tester su app e dispositivi mobili per piattaforme di crowdtesting internazionali. Da lì viene un'abitudine che porto in ogni progetto: chiedermi come un sistema si può rompere prima di consegnarlo.",
+        "Il mio core è tecnico: sviluppo full-stack e AI, messi alla prova costruendo sistemi che oggi girano presso clienti reali. Lo completa una formazione specifica in Project Management & AI, che mi permette di guidare un progetto dall'analisi alla consegna: perimetro, tempi, rischi e persone coinvolte, non solo il codice. Ho anche fondato WineGuard, un progetto deep-tech di autenticazione ottica per il vino, in fase di tutela della proprietà intellettuale. Lavoro dentro i progetti di agenzie e software house, oppure direttamente con le PMI. Vivo e lavoro a Milano, in ibrido o da remoto; parlo italiano, inglese e francese.",
     ],
     "links": [("GitHub", GITHUB), ("LinkedIn", LINKEDIN)],
 }
@@ -344,8 +350,6 @@ WRITING = {
     "soon_label": "In arrivo",
     # (titolo, href) — href None = "in arrivo"
     "cards": [
-        ("Liquid Gastronomy 2026", None),
-        ("Quello che una brigata stellata insegna sui processi aziendali", None),
     ],
 }
 
@@ -354,9 +358,10 @@ FAQ = {
     "question": "Cosa mi chiedono più spesso?",
     "items": [
         ("Devo sapere già cosa mi serve?", "No. Basta raccontarmi cosa succede oggi e dove si perde tempo. Capire quale strumento serve, e se serve, è il mio lavoro."),
-        ("Che differenza c'è tra te e un'agenzia di automazione?", "Un'agenzia ti vende il suo pacchetto. Io entro nel tuo processo, capisco cosa serve davvero — a volte è meno di quello che pensavi — e costruisco solo quello. E resto una persona sola: chi diagnostica è chi costruisce."),
+        ("Che differenza c'è tra te e un'agenzia di automazione?", "Un'agenzia ti vende il suo pacchetto. Io entro nel tuo processo, capisco cosa serve davvero (a volte è meno di quello che pensavi) e costruisco solo quello. E resto una persona sola: chi diagnostica è chi costruisce."),
+        ("Lavori anche con agenzie e software house?", "Sì. Entro nei progetti di altri team per la parte Odoo, integrazioni e AI, oppure lavoro direttamente con il cliente. Il metodo è lo stesso: capire come l'azienda lavora davvero, scegliere lo strumento più semplice che regge, collegarlo a quello che c'è già."),
         ('Cosa significa "fractional"?', "Presenza continuativa part-time: un numero di ore o giornate al mese concordato, dentro il tuo team, senza il costo e il vincolo di un'assunzione. Mi prendi per il problema, non a tempo pieno."),
-        ("Lavori con Odoo e con i gestionali che uso già?", "Sì. Su Odoo sviluppo moduli personalizzati, lo configuro e migro i dati da ERP proprietari. Se usi già un altro gestionale, un CRM o un e-commerce, lo collego via API agli altri strumenti — fatture elettroniche, WhatsApp, piattaforme di settore — con scritture senza doppioni e riallineamenti automatici. Spesso non serve cambiare sistema: serve farli parlare tra loro."),
+        ("Lavori con Odoo e con i gestionali che uso già?", "Sì. Su Odoo sviluppo moduli personalizzati, lo configuro e migro i dati da ERP proprietari. Se usi già un altro gestionale, un CRM o un e-commerce, lo collego via API agli altri strumenti (fatture elettroniche, WhatsApp, piattaforme di settore) con scritture senza doppioni e riallineamenti automatici. Spesso non serve cambiare sistema: serve farli parlare tra loro."),
         ("Che tecnologie usi?", "Le più semplici che reggono il tuo caso. A volte è un foglio Google potenziato con AI, a volte un agente su WhatsApp, a volte Odoo o un'applicazione completa. La tecnologia è una conseguenza della diagnosi, mai il punto di partenza."),
         ("Quanto costa?", "Dipende dal problema, non dal mio umore: dopo una prima conversazione ti do un prezzo chiuso o una tariffa chiara, con la manutenzione esplicitata a parte. Niente sorprese a consuntivo."),
     ],
@@ -389,19 +394,6 @@ CONTACT = {
     "closing": "30 minuti sul tuo processo, senza impegno.",
 }
 
-PRIVACY = {
-    "title": "Informativa privacy",
-    "updated": "Ultimo aggiornamento: ottobre 2026",
-    "sections": [
-        ("Chi tratta i dati", f"Il titolare del trattamento è Alessandro Frau (Frau Studio), P.IVA {VAT}, Milano. Per qualsiasi richiesta sui tuoi dati scrivi a {EMAIL}."),
-        ("Quali dati", "Se compili il modulo di contatto: nome, azienda, indirizzo email e quello che scrivi nella descrizione del problema e degli strumenti. Il sito non usa cookie di profilazione né strumenti di analisi."),
-        ("Perché e su quale base", "Uso questi dati solo per rispondere alla tua richiesta e, se lo vuoi, per preparare una proposta. La base giuridica è l'esecuzione di misure precontrattuali richieste da te (art. 6.1.b GDPR)."),
-        ("Per quanto tempo", "Conservo la richiesta per il tempo necessario a gestirla e comunque non oltre 24 mesi, salvo che nasca un rapporto di lavoro: in quel caso valgono i tempi previsti per la documentazione contrattuale e fiscale."),
-        ("Chi altro li vede", "Il modulo passa da Cloudflare, che riceve la richiesta, e da Resend, che me la inoltra via email; la casella di destinazione è su Google. Sono fornitori tecnici che trattano i dati per mio conto. Alcuni hanno sede negli Stati Uniti: il trasferimento avviene con le garanzie previste dal GDPR (clausole contrattuali standard o Data Privacy Framework). Non vendo né cedo i dati a nessuno."),
-        ("I tuoi diritti", "Puoi chiedere accesso, rettifica, cancellazione, limitazione, opposizione e portabilità dei tuoi dati scrivendo all'indirizzo sopra. Se ritieni che il trattamento violi il GDPR puoi presentare reclamo al Garante per la protezione dei dati personali."),
-    ],
-}
-
 FOOTER = {
     "meta": ["Frau Studio · Alessandro Frau", f"P.IVA {VAT}", "Milano", "© 2026"],
 }
@@ -413,6 +405,12 @@ NOT_FOUND = {"title": "Questa pagina non esiste.", "body": "Il metodo sì.", "ct
 # Template
 # ---------------------------------------------------------------------------
 e = escape
+
+
+def analytics():
+    if not UMAMI_WEBSITE_ID:
+        return ""
+    return f'\n<script defer src="{UMAMI_SRC}" data-website-id="{UMAMI_WEBSITE_ID}" data-domains="fraustudio.com"></script>'
 
 
 def head(title, description, path):
@@ -436,10 +434,10 @@ def head(title, description, path):
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,400;1,9..144,600&family=Inter:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="/assets/style.css?v={CSS_VERSION}">
+<link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/fraunces-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/fonts.css?v={FONTS_VERSION}">
+<link rel="stylesheet" href="/assets/style.css?v={CSS_VERSION}">{analytics()}
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -494,12 +492,12 @@ def header():
 
 def footer():
     meta = "\n".join(f"      <span>{e(m)}</span>" for m in FOOTER["meta"])
+    meta += '\n      <span><a href="/privacy/">Privacy</a></span>'
     return f"""
 <footer class="site-footer">
   <div class="container">
     <div class="site-footer__meta">
 {meta}
-      <span><a href="/privacy/">Privacy</a></span>
     </div>
   </div>
 </footer>
@@ -548,6 +546,18 @@ SCRIPT = """
     closeBtn.addEventListener("click", closeMenu);
     menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
 
+    // Statistiche: conta i clic che contano (email, WhatsApp, LinkedIn, GitHub). Solo se Umami è attivo.
+    document.addEventListener("click", function (ev) {
+      var a = ev.target.closest && ev.target.closest("a[href]");
+      if (!a || !window.umami) return;
+      var h = a.getAttribute("href");
+      var name = h.indexOf("mailto:") === 0 ? "clic-email"
+        : h.indexOf("wa.me") > -1 ? "clic-whatsapp-demo"
+        : h.indexOf("linkedin.com") > -1 ? "clic-linkedin"
+        : h.indexOf("github.com") > -1 ? "clic-github" : null;
+      if (name) window.umami.track(name);
+    });
+
     // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx). Soglia 0 e non 0.2:
     // con 12 card la sezione Lavori su telefono è alta più di 5 schermi e il 20% non entra mai.
     var items = document.querySelectorAll(".reveal");
@@ -562,7 +572,6 @@ SCRIPT = """
     }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
     items.forEach(function (el) { io.observe(el); });
   })();
-
   // Modulo di contatto: invio al Cloudflare Worker senza ricaricare la pagina.
   (function () {
     var form = document.getElementById("contact-form");
@@ -593,10 +602,12 @@ SCRIPT = """
         if (!r.ok) throw new Error(String(r.status));
         form.reset();
         show(MSG_SENT, false);
+        if (window.umami) window.umami.track("invio-modulo");
       }).catch(function () {
         show(MSG_ERROR + " " + EMAIL + ".", true);
       }).then(function () { button.disabled = false; });
     });
+    if (/[?&]inviato=1/.test(location.search)) show(MSG_SENT, false);
   })();
 </script>
 </body>
@@ -642,9 +653,9 @@ def work_card(work):
     external = ""
     if work.get("external"):
         href, label = work["external"]
-        external = f'\n            <a href="{href}" target="_blank" rel="noopener noreferrer" class="work-card__external" aria-label="{e(label)} — apri in nuova scheda">{e(label)} <span aria-hidden="true">&#8599;</span></a>'
+        external = f'\n            <a href="{href}" target="_blank" rel="noopener noreferrer" class="work-card__external" aria-label="{e(label)}, apri in nuova scheda">{e(label)} <span aria-hidden="true">&#8599;</span></a>'
     return f"""        <div class="card work-card">
-          <a href="{case_href(work)}" class="work-card__stretched-link" aria-label="{e(work["name"])} — {e(WORKS["view_case"])}"></a>
+          <a href="{case_href(work)}" class="work-card__stretched-link" aria-label="{e(work["name"])}: {e(WORKS["view_case"])}"></a>
           {badge(work)}
           <p class="kicker work-card__category">{e(work["category"])}</p>
           <h3 class="work-card__name">{e(work["name"])}</h3>
@@ -936,7 +947,7 @@ def case_page(work):
   </div>
 </main>
 """
-    return page(f"{work['name']} — Frau Studio", work["challenge"], case_href(work), main)
+    return page(f"{work['name']} · Frau Studio", work["challenge"], case_href(work), main)
 
 
 def not_found():
@@ -948,27 +959,77 @@ def not_found():
   <a href="/" class="btn btn-secondary"><span class="btn-arrow" aria-hidden="true">&larr;</span><span class="btn-label">{e(NOT_FOUND["cta"])}</span></a>
 </main>
 """
-    return page(f"{NOT_FOUND['title']} — Frau Studio", NOT_FOUND["body"], "/404.html", main)
+    return page(f"{NOT_FOUND['title']} · Frau Studio", NOT_FOUND["body"], "/404.html", main)
 
 
 def privacy():
-    blocks = "\n".join(f"""      <div class="case-study__block">
-        <h2 class="privacy__heading">{e(t)}</h2>
-        <p class="prose-measure">{e(b)}</p>
-      </div>""" for t, b in PRIVACY["sections"])
+    analytics_text = (
+        "Il sito usa Umami, uno strumento di statistica installato su un nostro server in Germania. "
+        "Non usa cookie e non raccoglie dati che identificano il visitatore: registra in forma aggregata "
+        "pagine visitate, sito di provenienza, tipo di dispositivo e i clic sui contatti. "
+        "Questi dati servono solo a capire quali contenuti sono utili."
+    ) if UMAMI_WEBSITE_ID else (
+        "Il sito non usa strumenti di statistica né cookie di profilazione."
+    )
+    blocks = [
+        ("Titolare del trattamento",
+         f"Alessandro Frau (Frau Studio), Milano, P.IVA {VAT}. Contatto per qualsiasi richiesta sulla privacy: {EMAIL}."),
+        ("Navigazione del sito",
+         "Il sito è ospitato da GitHub Pages (GitHub Inc.), che per motivi tecnici e di sicurezza registra "
+         "nei propri log l'indirizzo IP di chi lo visita. I font sono ospitati direttamente sul sito: "
+         "nessuna richiesta viene inviata a Google o ad altri servizi esterni. "
+         "Il sito non installa cookie, né tecnici né di profilazione: per questo non è presente un banner."),
+        ("Statistiche", analytics_text),
+        ("Modulo di contatto",
+         "Se compili il modulo, ricevo nome, azienda, indirizzo email e quello che scrivi sul problema e sugli "
+         "strumenti che usi. Li uso solo per risponderti e, se lo chiedi, per preparare una proposta. "
+         "Base giuridica: la tua richiesta e le misure precontrattuali (art. 6.1.b GDPR). "
+         "Il modulo non salva i dati sul sito: la richiesta passa da Cloudflare e mi arriva via email tramite Resend. "
+         "Conservo le richieste per il tempo necessario alla trattativa e comunque non oltre 24 mesi, "
+         "salvo che tu diventi cliente."),
+        ("Contatti via email",
+         "Se mi scrivi, uso il tuo indirizzo e quello che mi racconti solo per risponderti e, se lo chiedi, "
+         "per preparare una proposta. Base giuridica: la tua richiesta e le misure precontrattuali "
+         "(art. 6.1.b GDPR). Conservo la corrispondenza per il tempo necessario alla trattativa e, se diventi "
+         "cliente, per gli obblighi di legge."),
+        ("Demo di Pico su WhatsApp",
+         "Se scrivi al numero della demo, Pico (un agente di intelligenza artificiale) tratta il tuo numero, "
+         "il nome del tuo profilo WhatsApp e i messaggi che invii, per farti provare il servizio e, se lo chiedi, "
+         "per ricontattarti. Base giuridica: la tua richiesta (art. 6.1.b GDPR). Le conversazioni della demo "
+         "vengono cancellate automaticamente 30 giorni dopo l'ultimo messaggio. "
+         "Per non ricevere più messaggi basta scrivere STOP."),
+        ("Fornitori che trattano i dati",
+         "Meta Platforms Ireland (WhatsApp Business Platform), per la consegna dei messaggi della demo. "
+         "Anthropic PBC, che fornisce il modello di intelligenza artificiale usato da Pico: i testi delle "
+         "conversazioni vengono elaborati sui suoi server negli Stati Uniti, sulla base delle clausole "
+         "contrattuali standard della Commissione europea, e non vengono usati per addestrare i modelli. "
+         "Hetzner Online GmbH (Germania), che ospita i server della demo e delle statistiche. "
+         "GitHub Inc., che ospita il sito. "
+         "Cloudflare Inc., che riceve le richieste del modulo di contatto, e Resend Inc., che me le inoltra "
+         "via email; la casella di destinazione è su Google. Per i fornitori con sede negli Stati Uniti il "
+         "trasferimento avviene con le clausole contrattuali standard o nell'ambito del Data Privacy Framework."),
+        ("I tuoi diritti",
+         f"Puoi chiedere in qualsiasi momento di accedere ai tuoi dati, correggerli, cancellarli, limitarne "
+         f"il trattamento o opporti (artt. 15-22 GDPR), scrivendo a {EMAIL}. "
+         "Hai anche il diritto di presentare reclamo al Garante per la protezione dei dati personali "
+         "(garanteprivacy.it)."),
+    ]
+    body = "\n".join(
+        f"""      <section class="legal__block">
+        <h2>{e(t)}</h2>
+        <p class="prose-measure">{e(p)}</p>
+      </section>""" for t, p in blocks)
     main = f"""
-<main class="case-study">
-  <div class="container case-study__inner">
-    <a href="/" class="case-study__back">&larr; Torna alla home</a>
-    <h1 class="case-study__title privacy__title">{e(PRIVACY["title"])}</h1>
-    <p class="caption privacy__updated">{e(PRIVACY["updated"])}</p>
-    <div class="case-study__body">
-{blocks}
-    </div>
+<main class="legal">
+  <div class="container legal__inner">
+    <p class="kicker">Informativa</p>
+    <h1 class="legal__title">Privacy</h1>
+    <p class="caption">Ultimo aggiornamento: ottobre 2026</p>
+{body}
   </div>
 </main>
 """
-    return page(f"{PRIVACY['title']} — Frau Studio", "Come Frau Studio tratta i dati inviati dal modulo di contatto.", "/privacy/", main)
+    return page("Privacy · Frau Studio", "Come Frau Studio tratta i dati di chi visita il sito, scrive o prova la demo di Pico.", "/privacy/", main)
 
 
 def sitemap():
@@ -987,8 +1048,8 @@ def write(rel, text):
 if __name__ == "__main__":
     write("index.html", home())
     write("404.html", not_found())
+    write("privacy/index.html", privacy())
     for w in visible_cases():
         write(f"lavori/{w['slug']}/index.html", case_page(w))
-    write("privacy/index.html", privacy())
     write("sitemap.xml", sitemap())
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")

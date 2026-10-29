@@ -1342,6 +1342,31 @@ img.about__photo {
   margin-top: 0;
 }
 
+/* ---- Footer: link privacy ---- */
+.site-footer__meta a {
+  color: inherit;
+  text-underline-offset: 3px;
+}
+.site-footer__meta a:hover { color: var(--ink); }
+
+/* ---- Pagina privacy ---- */
+.legal__inner {
+  padding-block: 120px 40px;
+  display: grid;
+  gap: 32px;
+}
+.legal__title {
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  line-height: 1.1;
+  margin: 0;
+}
+.legal__block h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  margin: 0 0 8px;
+}
+.legal__block p { margin: 0; color: var(--ink); }
 /* ===== Versione 2 (ottobre 2026) ===== */
 
 /* Hero: riquadro con bordo blu e tre angoli arrotondati. Niente animazione d'entrata:
@@ -1441,8 +1466,4 @@ img.about__photo {
 .contact__mail:hover { color: var(--accent); }
 .contact__block .contact__links { margin-top: 12px; }
 
-/* Footer e privacy */
-.site-footer__meta a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
-.privacy__updated { margin-top: 12px; color: var(--muted); }
-.privacy__heading { font-size: 1.25rem; margin-bottom: 10px; }
 @media (min-width: 1000px) { .works__grid--3 { grid-template-columns: repeat(3, 1fr); } }

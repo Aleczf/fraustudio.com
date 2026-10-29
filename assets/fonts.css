@@ -1,0 +1,29 @@
+/* Font ospitati sul sito (niente richieste a Google: nessun IP del visitatore inviato a terzi).
+   File da fontsource (licenza SIL Open Font License), sottoinsieme latin. */
+@font-face {
+  font-family: "Inter"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("/assets/fonts/inter-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter"; font-style: normal; font-weight: 500; font-display: swap;
+  src: url("/assets/fonts/inter-latin-500-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter"; font-style: normal; font-weight: 600; font-display: swap;
+  src: url("/assets/fonts/inter-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "DM Serif Display"; font-style: normal; font-weight: 400; font-display: swap;
+  src: url("/assets/fonts/dm-serif-display-latin-400-normal.woff2") format("woff2");
+}
+/* Fraunces variabile: assi peso (100-900) e dimensione ottica (9-144), come la versione Google */
+@font-face {
+  font-family: "Fraunces"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("/assets/fonts/fraunces-latin-standard-normal.woff2") format("woff2-variations"),
+       url("/assets/fonts/fraunces-latin-standard-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Fraunces"; font-style: italic; font-weight: 100 900; font-display: swap;
+  src: url("/assets/fonts/fraunces-latin-standard-italic.woff2") format("woff2-variations"),
+       url("/assets/fonts/fraunces-latin-standard-italic.woff2") format("woff2");
+}
