@@ -58,7 +58,7 @@ METHOD = {
     "question": "Come lavoro?",
     "intro": "Tre fasi, sempre le stesse. Cambia solo il tuo processo.",
     "phases": [
-        ("01", "Entro", "Mi siedo dove il lavoro succede davvero: il gestionale, le email, il foglio Excel delle 18:30. Otto anni nelle brigate di cucine stellate mi hanno insegnato a leggere i sistemi di produzione sotto pressione: flussi, colli di bottiglia, cosa si rompe e perché."),
+        ("01", "Entro", "Mi siedo dove il lavoro succede davvero: il gestionale, le email, il foglio Excel delle 18:30. Prima di proporre qualcosa guardo come il processo regge sotto pressione: flussi, colli di bottiglia, cosa si rompe e perché."),
         ("02", "Capisco", "Identifico dove l'automazione e l'AI convengono davvero, e dove no. Non ogni processo va automatizzato: alcuni vanno semplificati, altri lasciati alle persone. La diagnosi è il prodotto, non un preambolo."),
         ("03", "Costruisco", "Sviluppo la soluzione su misura, dentro gli strumenti che già usi, e te la consegno in modo che il tuo team possa mantenerla. Quello che richiedeva quattro fornitori e mesi, oggi è una persona e qualche settimana."),
     ],
@@ -284,7 +284,7 @@ ABOUT = {
     "question": "Chi c'è dietro?",
     "photo_alt": "Ritratto di Alessandro Frau",
     "paragraphs": [
-        "Sono Alessandro, e Frau Studio sono io. Prima di scrivere codice ho passato otto anni nelle cucine e nelle sale di ristoranti stellati, e sono sommelier AIS. In una brigata impari a leggere un sistema di produzione sotto pressione: flussi, ruoli, colli di bottiglia, cosa cede per primo quando il ritmo sale. È esattamente quello che faccio oggi nelle aziende: solo che ora, dopo la diagnosi, la soluzione la costruisco anch'io.",
+        "Sono Alessandro, e Frau Studio sono io. Il mio lavoro parte sempre dallo stesso punto: capire come un'azienda funziona davvero, chi fa cosa, dove i flussi si inceppano e cosa cede per primo quando il ritmo sale. Poi, fatta la diagnosi, la soluzione la costruisco io.",
         "Ho lavorato anche come tester su app e dispositivi mobili per piattaforme di crowdtesting internazionali. Da lì viene un'abitudine che porto in ogni progetto: chiedermi come un sistema si può rompere prima di consegnarlo.",
         "Il mio core è tecnico: sviluppo full-stack e AI, messi alla prova costruendo sistemi che oggi girano presso clienti reali. Lo completa una formazione specifica in Project Management & AI, che mi permette di guidare un progetto dall'analisi alla consegna: perimetro, tempi, rischi e persone coinvolte, non solo il codice. Ho anche fondato WineGuard, un progetto deep-tech di autenticazione ottica per il vino, in fase di tutela della proprietà intellettuale. Lavoro dentro i progetti di agenzie e software house, oppure direttamente con le PMI. Vivo e lavoro a Milano, in ibrido o da remoto; parlo italiano, inglese e francese.",
     ],
@@ -298,7 +298,6 @@ WRITING = {
     # (titolo, href) — href None = "in arrivo"
     "cards": [
         ("Liquid Gastronomy 2026", None),
-        ("Quello che una brigata stellata insegna sui processi aziendali", None),
     ],
 }
 
