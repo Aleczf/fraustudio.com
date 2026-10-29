@@ -20,7 +20,7 @@
 <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/fraunces-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts.css?v=d289be2e1e">
-<link rel="stylesheet" href="/assets/style.css?v=3c75e96718">
+<link rel="stylesheet" href="/assets/style.css?v=c60aad29cd">
 <script>document.documentElement.classList.add("js")</script>
 </head>
 <body>
@@ -35,11 +35,12 @@
         <li><a href="/#servizi" class="site-nav__link">Servizi</a></li>
         <li><a href="/#lavori" class="site-nav__link">Lavori</a></li>
         <li><a href="/#chi-sono" class="site-nav__link">Chi sono</a></li>
+        <li><a href="/#agenzie" class="site-nav__link">Per agenzie</a></li>
       </ul>
     </nav>
 
     <div class="site-header__actions">
-      <a href="/#contatto" class="btn btn-primary site-header__cta">Descrivimi un processo</a>
+      <a href="/#contatto" class="btn btn-primary site-header__cta">Raccontami il problema</a>
       <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Apri il menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
           <line x1="3" y1="8" x2="21" y2="8" />
@@ -65,9 +66,10 @@
   <a href="/#servizi" class="mobile-menu__link">Servizi</a>
   <a href="/#lavori" class="mobile-menu__link">Lavori</a>
   <a href="/#chi-sono" class="mobile-menu__link">Chi sono</a>
+  <a href="/#agenzie" class="mobile-menu__link">Per agenzie</a>
   </nav>
   <div class="container mobile-menu__footer">
-    <a href="/#contatto" class="btn btn-primary">Descrivimi un processo</a>
+    <a href="/#contatto" class="btn btn-primary">Raccontami il problema</a>
   </div>
 </div>
 
@@ -102,7 +104,7 @@
 
     <div class="case-study__cta">
       <h2>Che processo ti rallenta?</h2>
-      <a href="mailto:alessandro.frau88@gmail.com" class="btn btn-primary">30 minuti sul tuo processo, senza impegno.</a>
+      <a href="/#contatto" class="btn btn-primary">Raccontami il problema &rarr;</a>
     </div>
   </div>
 </main>
@@ -185,6 +187,43 @@
       });
     }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
     items.forEach(function (el) { io.observe(el); });
+  })();
+  // Modulo di contatto: invio al Cloudflare Worker senza ricaricare la pagina.
+  (function () {
+    var form = document.getElementById("contact-form");
+    if (!form || !window.fetch) return;
+    var started = Date.now();
+    var status = form.querySelector(".contact-form__status");
+    var button = form.querySelector("button[type=submit]");
+    var MSG_SENT = "Ricevuto. Ti rispondo entro 2 giorni lavorativi.";
+    var MSG_ERROR = "Non è partito. Riprova tra poco oppure scrivimi a";
+    var EMAIL = "alessandro.frau88@gmail.com";
+    function show(text, isError) {
+      status.hidden = false;
+      status.textContent = text;
+      status.classList.toggle("is-error", !!isError);
+    }
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      var data = {};
+      new FormData(form).forEach(function (v, k) { data[k] = String(v); });
+      data.t = String(Date.now() - started);
+      button.disabled = true;
+      fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }).then(function (r) {
+        if (!r.ok) throw new Error(String(r.status));
+        form.reset();
+        show(MSG_SENT, false);
+        if (window.umami) window.umami.track("invio-modulo");
+      }).catch(function () {
+        show(MSG_ERROR + " " + EMAIL + ".", true);
+      }).then(function () { button.disabled = false; });
+    });
+    if (/[?&]inviato=1/.test(location.search)) show(MSG_SENT, false);
   })();
 </script>
 </body>

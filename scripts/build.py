@@ -9,6 +9,7 @@ lo stile sta in assets/style.css. Dopo una modifica:
 e committa i file generati: index.html, 404.html, lavori/<slug>/index.html, sitemap.xml.
 """
 from html import escape
+from urllib.parse import quote
 from pathlib import Path
 import hashlib
 import json
@@ -26,9 +27,14 @@ VAT = "14815310967"
 UMAMI_SRC = "https://stats.fraustudio.com/script.js"
 UMAMI_WEBSITE_ID = ""
 
+# Endpoint del Cloudflare Worker che riceve il modulo di contatto (cartella worker/).
+FORM_ENDPOINT = "https://fraustudio-contatto.fraustudio.workers.dev"
+# Link di prenotazione (Cal.com, Calendly...). Se None, il bottone apre una email precompilata.
+BOOKING_URL = None
+
 META = {
-    "title": "Frau Studio · Alessandro Frau, AI Process Engineering",
-    "description": "Entro nei processi delle PMI e costruisco l'automazione che serve: integrazioni su misura, Odoo, dashboard con AI e agenti WhatsApp. Milano, ibrido o remoto.",
+    "title": "Frau Studio · Alessandro Frau, automazione e integrazioni per PMI",
+    "description": "Collego i gestionali che usi già ed elimino il lavoro fatto due volte: integrazioni su misura, Odoo, dashboard con AI e agenti WhatsApp. Milano, in sede o da remoto.",
 }
 
 NAV = {
@@ -38,19 +44,21 @@ NAV = {
         ("Servizi", "/#servizi"),
         ("Lavori", "/#lavori"),
         ("Chi sono", "/#chi-sono"),
+        ("Per agenzie", "/#agenzie"),
     ],
-    "cta": "Descrivimi un processo",
+    "cta": "Raccontami il problema",
     "cta_href": "/#contatto",
 }
 
 HERO = {
-    "lines": ["Non un'agenzia.", "Non un dipendente.", "Non il solito freelance."],
-    "sub": "Entro nei processi della tua azienda e costruisco l'automazione che serve, in giorni e non in trimestri. Analisi sul campo, AI dove conviene davvero, soluzioni che il tuo team sa mantenere.",
-    "cta_primary": "Descrivimi un processo →",
+    "lines": ["Collego i gestionali che usi già.", "Elimino il lavoro fatto due volte."],
+    "sub": "Fatture smistate a mano, dati ricopiati da un sistema all'altro, richieste perse tra WhatsApp, email e telefono. Entro nei processi della tua azienda e costruisco l'automazione che serve, in giorni e non in trimestri, con l'AI solo dove conviene davvero.",
+    "cta_primary": "Raccontami il problema →",
     "cta_primary_href": "/#contatto",
-    "cta_secondary": "Guarda come lavoro",
-    "cta_secondary_href": "/#metodo",
-    "context": "Le più grandi aziende tech stanno investendo miliardi in ingegneri che costruiscono dentro i processi dei clienti. Io porto lo stesso metodo alle aziende reali italiane.",
+    "cta_secondary": "Guarda i lavori",
+    "cta_secondary_href": "/#lavori",
+    "context_strong": "Non un'agenzia, non un dipendente.",
+    "context": "Una persona sola che analizza e costruisce: chi fa la diagnosi è chi scrive il codice. Milano, in sede o da remoto.",
 }
 
 METHOD = {
@@ -73,20 +81,30 @@ METHOD = {
 SERVICES = {
     "kicker": "SERVIZI",
     "question": "Su cosa intervengo?",
+    # (problema, servizio, descrizione)
     "items": [
-        ("Integrazioni su misura", "Collego gestionali, piattaforme di settore, e-commerce e canali di messaggistica via API, con scritture senza doppioni e riallineamenti automatici."),
-        ("Dashboard con AI", "Cruscotti costruiti sui dati che l'azienda ha già, con modelli linguistici che classificano, analizzano e smistano al posto delle persone."),
-        ("Odoo", "Moduli personalizzati, configurazione e migrazioni da ERP proprietari."),
-        ("Agenti WhatsApp", "Agenti che conversano con clienti e team su WhatsApp, vocali compresi, e scrivono nei sistemi aziendali."),
+        ("Sistemi che non si parlano", "Integrazioni su misura", "Collego gestionali, piattaforme di settore, e-commerce e canali di messaggistica via API, con scritture senza doppioni e riallineamenti automatici."),
+        ("Ore spese a leggere e smistare", "Dashboard con AI", "Cruscotti costruiti sui dati che l'azienda ha già, con modelli linguistici che classificano, analizzano e smistano al posto delle persone."),
+        ("Un gestionale che è diventato un limite", "Odoo", "Moduli personalizzati, configurazione e migrazioni da ERP proprietari."),
+        ("Clienti e richieste persi su WhatsApp", "Agenti WhatsApp", "Agenti che conversano con clienti e team su WhatsApp, vocali compresi, e scrivono nei sistemi aziendali."),
     ],
 }
 
 # Un caso: badge (+ nota), categoria, nome, sfida, intervento (+ punti), esito, stack, link esterno.
 # "filled": solo i lavori con un cliente reale hanno il badge pieno.
+# "lab": progetti miei, mostrati in forma compatta sotto i casi cliente ("lab_line" è la riga in homepage).
+# "hidden": il caso non compare sul sito e la sua pagina non viene generata.
 WORKS = {
     "kicker": "LAVORI",
     "question": "Cosa ho costruito?",
-    "transparency": "Alcuni lavori sono per clienti reali, altri sono prodotti miei o concept che ho costruito per dimostrare il metodo. È sempre indicato quale, insieme a dove si trova oggi il progetto.",
+    "transparency": "Lavori per clienti reali, raggruppati per il problema che risolvono. Per ognuno è indicato dove si trova oggi il progetto.",
+    "groups": [
+        ("Togliere lavoro manuale", "Documenti e richieste che oggi qualcuno legge e smista a mano.", ["controllo-costi-ristorante", "intake-studio-legale"]),
+        ("Far parlare i sistemi", "Lo stesso dato inserito in due posti, o sparso tra strumenti diversi.", ["odoo-cartsan", "crm-clinica"]),
+        ("Cambiare o costruire il gestionale", "Quando lo strumento che c'è non basta più, o non c'è ancora.", ["migrazione-erp-odoo", "magazzino-filati", "gioielli-odoo"]),
+    ],
+    "lab_title": "Prodotti e laboratorio",
+    "lab_desc": "Progetti miei: servono a provare il metodo prima di portarlo nei progetti dei clienti.",
     "view_case": "Leggi il caso",
     "cases": [
         {
@@ -108,6 +126,8 @@ WORKS = {
         },
         {
             "slug": "pico",
+            "lab": True,
+            "lab_line": "Agente WhatsApp che ricontatta i lead fermi nel CRM. In produzione dal primo cliente.",
             "summary": "Nei CRM dormono contatti che hanno già chiesto un preventivo o comprato. Nessuno li ricontatta.",
             "badge": "PRODOTTO", "note": "in produzione",
             "name": "Pico",
@@ -164,14 +184,14 @@ WORKS = {
             "name": "Intake con AI per uno studio legale",
             "category": "Studio legale · Dashboard con AI · Odoo",
             "challenge": "Uno studio di una decina di persone riceveva richieste da telefono, social e WhatsApp senza un CRM né un sistema interno. Chi assegna un caso a quale avvocato lo decideva a mano, ogni volta.",
-            "intervention": "Un modulo di intake su Odoo. Ogni richiesta viene registrata, analizzata da un modello linguistico e assegnata all'avvocato giusto. Una dashboard mostra tutto, e gli avvocati possono correggere l'assegnazione dalla dashboard o direttamente da WhatsApp.",
+            "intervention": "Un modulo di intake su Odoo. Ogni richiesta viene registrata, analizzata da un modello linguistico e proposta all'avvocato giusto. Una dashboard mostra tutto, e gli avvocati possono correggere l'assegnazione dalla dashboard o direttamente da WhatsApp.",
             "points": [
                 ("Sopra Odoo, non accanto.", "Invece di un'app separata, Odoo con un'interfaccia alleggerita nei colori dello studio: CRM, firma degli incarichi e storico nello stesso posto."),
                 ("Gli strumenti esistenti restano.", "Lo studio usava già un proprio assistente AI personalizzato e non voleva perderlo: la dashboard lo interroga."),
                 ("Dati sensibili.", "L'infrastruttura gira su cloud dedicato, con la sicurezza come requisito di partenza."),
                 ("Demo funzionante prima del contratto.", "Prototipo su Odoo in container con dati inventati, usato nella trattativa con lo studio."),
             ],
-            "outcome": "Ogni richiesta registrata, analizzata e assegnata all'avvocato giusto.",
+            "outcome": "Ogni richiesta registrata, analizzata e proposta all'avvocato giusto. L'ultima parola resta a una persona.",
             "stack": "Odoo 17 · Claude API · WhatsApp · Docker · AWS",
         },
         {
@@ -223,6 +243,8 @@ WORKS = {
         },
         {
             "slug": "fero",
+            "lab": True,
+            "lab_line": "Vetrina, scelta assistita, contatti e back-office in un solo sistema, costruito in giorni.",
             "summary": "Vetrina, scelta assistita, contatti e back-office: di norma quattro fornitori e settimane di coordinamento.",
             "badge": "CONCEPT DIMOSTRATIVO",
             "name": "FERØ",
@@ -235,6 +257,8 @@ WORKS = {
         },
         {
             "slug": "wineguard",
+            "lab": True,
+            "lab_line": "Anticontraffazione per il vino con la sola fotocamera di uno smartphone.",
             "summary": "L'anticontraffazione per il vino chiede chip, RFID o etichette speciali che molte cantine non sostengono.",
             "badge": "R&D", "note": "in test",
             "name": "WineGuard",
@@ -252,6 +276,8 @@ WORKS = {
         },
         {
             "slug": "nolo-hub",
+            "lab": True,
+            "lab_line": "Piattaforma editoriale con sistema agentico sul mondo no/low alcohol.",
             "badge": "IN COSTRUZIONE",
             "name": "NOLO HUB",
             "category": "Piattaforma editoriale · Sistema agentico",
@@ -262,6 +288,7 @@ WORKS = {
         },
         {
             "slug": "cold-outreach",
+            "hidden": True,
             "badge": "STRUMENTO INTERNO", "note": "in avvio",
             "name": "Cold outreach a costo quasi nullo",
             "category": "Lead generation B2B · Automazione",
@@ -279,6 +306,20 @@ WORKS = {
     ],
 }
 
+TRUST = {
+    "kicker": "AFFIDABILITÀ",
+    "question": "Sei una persona sola. Cosa succede se ti fermi?",
+    "intro": "È la domanda giusta. Ecco come lavoro perché il sistema che ti consegno non dipenda da me.",
+    "items": [
+        ("Il codice è tuo", "Repository, account e chiavi sono intestati alla tua azienda. Io lavoro con accessi che puoi revocare in qualsiasi momento."),
+        ("Documentazione a ogni consegna", "Come funziona, dove si trova, cosa fare se qualcosa si ferma. Scritta perché la legga anche un altro sviluppatore."),
+        ("Testato prima di consegnare", "Vengo dal QA testing di app e dispositivi: prima di consegnare provo i casi in cui il sistema si può rompere."),
+        ("Dati riservati, accessi minimi", "Accedo solo ai dati che servono. Sulle decisioni delicate l'AI propone e una persona conferma."),
+        ("Manutenzione esplicita", "Un accordo a parte, con tempi di risposta scritti. Sai prima cosa copre e quanto costa."),
+        ("Quando serve più di me", "Sui progetti più grandi lavoro con altri sviluppatori e partner Odoo di fiducia, e te lo dico all'inizio."),
+    ],
+}
+
 ABOUT = {
     "kicker": "CHI SONO",
     "question": "Chi c'è dietro?",
@@ -289,6 +330,18 @@ ABOUT = {
         "Il mio core è tecnico: sviluppo full-stack e AI, messi alla prova costruendo sistemi che oggi girano presso clienti reali. Lo completa una formazione specifica in Project Management & AI, che mi permette di guidare un progetto dall'analisi alla consegna: perimetro, tempi, rischi e persone coinvolte, non solo il codice. Ho anche fondato WineGuard, un progetto deep-tech di autenticazione ottica per il vino, in fase di tutela della proprietà intellettuale. Lavoro dentro i progetti di agenzie e software house, oppure direttamente con le PMI. Vivo e lavoro a Milano, in ibrido o da remoto; parlo italiano, inglese e francese.",
     ],
     "links": [("GitHub", GITHUB), ("LinkedIn", LINKEDIN)],
+}
+
+AGENCY = {
+    "kicker": "PER AGENZIE E SOFTWARE HOUSE",
+    "question": "Vi serve una persona su Odoo, integrazioni o AI?",
+    "intro": "Entro nel vostro progetto per la parte tecnica e consegno dentro i vostri tempi e le vostre regole.",
+    "items": [
+        ("Nei vostri strumenti", "Lavoro sul vostro repository, con il vostro sistema di ticket e le vostre convenzioni di codice."),
+        ("Il cliente resta vostro", "Parlo con il cliente solo se e quando lo decidete voi."),
+        ("Consegna documentata", "Ogni modulo o integrazione arriva con documentazione e passaggio di consegne al vostro team."),
+    ],
+    "cta": "Parliamo di una collaborazione →",
 }
 
 WRITING = {
@@ -304,6 +357,7 @@ FAQ = {
     "kicker": "FAQ",
     "question": "Cosa mi chiedono più spesso?",
     "items": [
+        ("Devo sapere già cosa mi serve?", "No. Basta raccontarmi cosa succede oggi e dove si perde tempo. Capire quale strumento serve, e se serve, è il mio lavoro."),
         ("Che differenza c'è tra te e un'agenzia di automazione?", "Un'agenzia ti vende il suo pacchetto. Io entro nel tuo processo, capisco cosa serve davvero (a volte è meno di quello che pensavi) e costruisco solo quello. E resto una persona sola: chi diagnostica è chi costruisce."),
         ("Lavori anche con agenzie e software house?", "Sì. Entro nei progetti di altri team per la parte Odoo, integrazioni e AI, oppure lavoro direttamente con il cliente. Il metodo è lo stesso: capire come l'azienda lavora davvero, scegliere lo strumento più semplice che regge, collegarlo a quello che c'è già."),
         ('Cosa significa "fractional"?', "Presenza continuativa part-time: un numero di ore o giornate al mese concordato, dentro il tuo team, senza il costo e il vincolo di un'assunzione. Mi prendi per il problema, non a tempo pieno."),
@@ -316,7 +370,27 @@ FAQ = {
 CONTACT = {
     "kicker": "CONTATTO",
     "question": "Che processo ti rallenta?",
-    "body": "Descrivimelo in due righe. Ti dico come lo automatizzerei. E se non conviene automatizzarlo, ti dico anche quello.",
+    "body": "Raccontamelo in poche righe. Ti dico come lo automatizzerei, e se non conviene automatizzarlo ti dico anche quello.",
+    "steps": [
+        ("1. Mi racconti il problema", "Poche righe, nessuna competenza tecnica richiesta."),
+        ("2. Valutiamo il processo", "In 30 minuti capisco dove si perde tempo e se conviene intervenire."),
+        ("3. Ricevi una proposta chiara", "Perimetro, risultato atteso, tempi, prezzo e manutenzione, prima di iniziare."),
+    ],
+    "form": {
+        "problema": ("Cosa succede oggi?", "Es. ogni settimana una persona ricopia a mano gli ordini dall'e-commerce al gestionale."),
+        "strumenti": ("Che strumenti usate?", "Es. gestionale, Excel, WhatsApp, e-commerce"),
+        "nome": "Nome e azienda",
+        "email": "Email",
+        "submit": "Invia il problema →",
+        "reply_time": "Ti rispondo entro 2 giorni lavorativi.",
+        "privacy": "Uso questi dati solo per risponderti. Dettagli nell'",
+        "sent": "Ricevuto. Ti rispondo entro 2 giorni lavorativi.",
+        "error": "Non è partito. Riprova tra poco oppure scrivimi a",
+    },
+    "call_title": "Preferisci parlarne a voce?",
+    "call_body": "30 minuti sul tuo processo, senza impegno.",
+    "call_cta": "Prenota una chiamata →",
+    "mail_title": "Oppure scrivimi",
     "closing": "30 minuti sul tuo processo, senza impegno.",
 }
 
@@ -498,14 +572,58 @@ SCRIPT = """
     }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
     items.forEach(function (el) { io.observe(el); });
   })();
+  // Modulo di contatto: invio al Cloudflare Worker senza ricaricare la pagina.
+  (function () {
+    var form = document.getElementById("contact-form");
+    if (!form || !window.fetch) return;
+    var started = Date.now();
+    var status = form.querySelector(".contact-form__status");
+    var button = form.querySelector("button[type=submit]");
+    var MSG_SENT = __MSG_SENT__;
+    var MSG_ERROR = __MSG_ERROR__;
+    var EMAIL = __EMAIL__;
+    function show(text, isError) {
+      status.hidden = false;
+      status.textContent = text;
+      status.classList.toggle("is-error", !!isError);
+    }
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      var data = {};
+      new FormData(form).forEach(function (v, k) { data[k] = String(v); });
+      data.t = String(Date.now() - started);
+      button.disabled = true;
+      fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      }).then(function (r) {
+        if (!r.ok) throw new Error(String(r.status));
+        form.reset();
+        show(MSG_SENT, false);
+        if (window.umami) window.umami.track("invio-modulo");
+      }).catch(function () {
+        show(MSG_ERROR + " " + EMAIL + ".", true);
+      }).then(function () { button.disabled = false; });
+    });
+    if (/[?&]inviato=1/.test(location.search)) show(MSG_SENT, false);
+  })();
 </script>
 </body>
 </html>
 """
 
 
+def script():
+    f = CONTACT["form"]
+    return (SCRIPT.replace("__MSG_SENT__", json.dumps(f["sent"], ensure_ascii=False))
+                  .replace("__MSG_ERROR__", json.dumps(f["error"], ensure_ascii=False))
+                  .replace("__EMAIL__", json.dumps(EMAIL)))
+
+
 def page(title, description, path, main):
-    return head(title, description, path) + header() + main + footer() + SCRIPT
+    return head(title, description, path) + header() + main + footer() + script()
 
 
 def section(id_, kicker, question, inner, intro=None):
@@ -566,7 +684,7 @@ def person_jsonld():
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Alessandro Frau",
-        "jobTitle": "AI Process Engineer",
+        "jobTitle": "Consulente di automazione e integrazioni",
         "worksFor": {"@type": "Organization", "name": "Frau Studio", "url": SITE_URL, "vatID": f"IT{VAT}"},
         "url": SITE_URL,
         "email": EMAIL,
@@ -576,26 +694,42 @@ def person_jsonld():
     return json.dumps(data, ensure_ascii=False)
 
 
+def visible_cases():
+    return [w for w in WORKS["cases"] if not w.get("hidden")]
+
+
+def case_by_slug(slug):
+    return next(w for w in WORKS["cases"] if w["slug"] == slug)
+
+
+def booking_href():
+    if BOOKING_URL:
+        return BOOKING_URL
+    return f"mailto:{EMAIL}?subject=" + quote("Chiamata di 30 minuti sul mio processo")
+
+
 def home():
     lines = []
     last = len(HERO["lines"]) - 1
     for i, line in enumerate(HERO["lines"]):
         text = f'<span class="hero__line-accent">{e(line)}</span>' if i == last else e(line)
-        lines.append(f'        <span class="hero__line" style="animation-delay: {i * 120}ms">{text}</span>')
+        lines.append(f'          <span class="hero__line">{text}</span>')
     hero = f"""
 <main>
   <script type="application/ld+json">{person_jsonld()}</script>
   <section id="top" class="hero">
     <div class="container">
-      <h1 class="hero__heading">
+      <div class="hero__frame">
+        <h1 class="hero__heading">
 {chr(10).join(lines)}
-      </h1>
-      <p class="hero__sub prose-measure">{e(HERO["sub"])}</p>
-      <div class="hero__cta-row">
-        <a href="{HERO["cta_primary_href"]}" class="btn btn-primary">{e(HERO["cta_primary"])}</a>
-        <a href="{HERO["cta_secondary_href"]}" class="btn btn-secondary"><span class="btn-label">{e(HERO["cta_secondary"])}</span><span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+        </h1>
+        <p class="hero__sub prose-measure">{e(HERO["sub"])}</p>
+        <div class="hero__cta-row">
+          <a href="{HERO["cta_primary_href"]}" class="btn btn-primary">{e(HERO["cta_primary"])}</a>
+          <a href="{HERO["cta_secondary_href"]}" class="btn btn-secondary"><span class="btn-label">{e(HERO["cta_secondary"])}</span><span class="btn-arrow" aria-hidden="true">&rarr;</span></a>
+        </div>
+        <p class="hero__context caption"><strong>{e(HERO["context_strong"])}</strong> {e(HERO["context"])}</p>
       </div>
-      <p class="hero__context caption">{e(HERO["context"])}</p>
     </div>
   </section>
 """
@@ -620,14 +754,43 @@ def home():
       </div>""", intro=METHOD["intro"])
 
     services = section("servizi", SERVICES["kicker"], SERVICES["question"], '      <div class="services__grid">\n' + "\n".join(f"""        <div class="method__engagement-card">
+          <p class="service__pain">{e(p)}</p>
           <h3>{e(t)}</h3>
           <p>{e(b)}</p>
-        </div>""" for t, b in SERVICES["items"]) + "\n      </div>")
+        </div>""" for p, t, b in SERVICES["items"]) + "\n      </div>")
 
-    works = section("lavori", WORKS["kicker"], WORKS["question"], f"""      <p class="works__transparency prose-measure caption">{e(WORKS["transparency"])}</p>
-      <div class="works__grid">
-{chr(10).join(work_card(w) for w in WORKS["cases"])}
+    groups = []
+    for title, desc, slugs in WORKS["groups"]:
+        groups.append(f"""      <div class="works__group">
+        <div class="works__group-head">
+          <h3 class="works__group-title">{e(title)}</h3>
+          <p class="works__group-desc">{e(desc)}</p>
+        </div>
+        <div class="works__grid{" works__grid--3" if len(slugs) == 3 else ""}">
+{chr(10).join(work_card(case_by_slug(s)) for s in slugs)}
+        </div>
       </div>""")
+    lab_rows = "\n".join(f"""          <a href="{case_href(w)}" class="lab__row">
+            <span class="lab__name">{e(w["name"])}</span>
+            <span class="lab__desc">{e(w["lab_line"])}</span>
+            <span class="lab__status">{e(w["badge"])}{(" · " + e(w["note"])) if w.get("note") else ""}</span>
+          </a>""" for w in visible_cases() if w.get("lab"))
+    works = section("lavori", WORKS["kicker"], WORKS["question"], f"""      <p class="works__transparency prose-measure caption">{e(WORKS["transparency"])}</p>
+{chr(10).join(groups)}
+      <div class="lab">
+        <div class="lab__head">
+          <h3 class="works__group-title">{e(WORKS["lab_title"])}</h3>
+          <p class="works__group-desc">{e(WORKS["lab_desc"])}</p>
+        </div>
+        <div class="lab__list">
+{lab_rows}
+        </div>
+      </div>""")
+
+    trust = section("affidabilita", TRUST["kicker"], TRUST["question"], '      <div class="trust__grid">\n' + "\n".join(f"""        <div class="method__engagement-card">
+          <h3>{e(t)}</h3>
+          <p>{e(b)}</p>
+        </div>""" for t, b in TRUST["items"]) + "\n      </div>", intro=TRUST["intro"])
 
     about_p = "\n".join(f'          <p class="prose-measure">{e(p)}</p>' for p in ABOUT["paragraphs"])
     about_links = "\n".join(f'            <a href="{h}" class="about__link">{e(l)} <span aria-hidden="true">&rarr;</span></a>' for l, h in ABOUT["links"])
@@ -640,6 +803,24 @@ def home():
           </div>
         </div>
       </div>""")
+
+    agency_items = "\n".join(f"""          <div class="agency__item">
+            <h3>{e(t)}</h3>
+            <p>{e(b)}</p>
+          </div>""" for t, b in AGENCY["items"])
+    agency = f"""
+  <section id="agenzie" class="agency">
+    <div class="container agency__inner">
+      <p class="kicker">{e(AGENCY["kicker"])}</p>
+      <h2 class="section-question">{e(AGENCY["question"])}</h2>
+      <p class="section-intro prose-measure">{e(AGENCY["intro"])}</p>
+      <div class="agency__grid">
+{agency_items}
+      </div>
+      <div class="agency__cta"><a href="/#contatto" class="btn btn-outline">{e(AGENCY["cta"])}</a></div>
+    </div>
+  </section>
+"""
 
     cards = []
     for title, href in WRITING["cards"]:
@@ -661,15 +842,65 @@ def home():
       </div>
       <script type="application/ld+json">{faq_jsonld()}</script>""")
 
+    f = CONTACT["form"]
+    steps = "\n".join(f"""        <div class="contact__step">
+          <h3>{e(t)}</h3>
+          <p>{e(b)}</p>
+        </div>""" for t, b in CONTACT["steps"])
     contact = section("contatto", CONTACT["kicker"], CONTACT["question"], f"""      <p class="prose-measure contact__body">{e(CONTACT["body"])}</p>
-      <div class="contact__links">
-        <a href="mailto:{EMAIL}" class="contact__link contact__link--primary">Email: {EMAIL}</a>
-        <a href="{LINKEDIN}" class="contact__link">LinkedIn</a>
-        <a href="{GITHUB}" class="contact__link">GitHub</a>
+      <div class="contact__steps">
+{steps}
       </div>
-      <p class="contact__closing caption">{e(CONTACT["closing"])}</p>""")
+      <div class="contact__layout">
+        <form class="contact-form" id="contact-form" action="{FORM_ENDPOINT}" method="post" novalidate>
+          <div class="field">
+            <label for="f-problema">{e(f["problema"][0])}</label>
+            <textarea id="f-problema" name="problema" rows="5" required minlength="10" maxlength="5000" placeholder="{e(f["problema"][1])}"></textarea>
+          </div>
+          <div class="field">
+            <label for="f-strumenti">{e(f["strumenti"][0])} <span class="field__optional">(facoltativo)</span></label>
+            <input id="f-strumenti" name="strumenti" type="text" maxlength="500" placeholder="{e(f["strumenti"][1])}">
+          </div>
+          <div class="contact-form__row">
+            <div class="field">
+              <label for="f-nome">{e(f["nome"])}</label>
+              <input id="f-nome" name="nome" type="text" required maxlength="200" autocomplete="name">
+            </div>
+            <div class="field">
+              <label for="f-email">{e(f["email"])}</label>
+              <input id="f-email" name="email" type="email" required maxlength="200" autocomplete="email">
+            </div>
+          </div>
+          <div class="field field--trap" aria-hidden="true">
+            <label for="f-sito">Sito web</label>
+            <input id="f-sito" name="sito" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <input type="hidden" name="t" value="">
+          <div class="contact-form__foot">
+            <button type="submit" class="btn btn-primary">{e(f["submit"])}</button>
+            <p class="caption">{e(f["reply_time"])}</p>
+          </div>
+          <p class="caption contact-form__privacy">{e(f["privacy"])}<a href="/privacy/">informativa privacy</a>.</p>
+          <p class="contact-form__status" role="status" aria-live="polite" hidden></p>
+        </form>
+        <div class="contact__side">
+          <div class="contact__block">
+            <h3>{e(CONTACT["call_title"])}</h3>
+            <p>{e(CONTACT["call_body"])}</p>
+            <a href="{booking_href()}" class="btn btn-outline"{' target="_blank" rel="noopener noreferrer"' if BOOKING_URL else ''}>{e(CONTACT["call_cta"])}</a>
+          </div>
+          <div class="contact__block">
+            <h3>{e(CONTACT["mail_title"])}</h3>
+            <a href="mailto:{EMAIL}" class="contact__mail">{EMAIL}</a>
+            <div class="contact__links">
+              <a href="{LINKEDIN}" class="contact__link">LinkedIn</a>
+              <a href="{GITHUB}" class="contact__link">GitHub</a>
+            </div>
+          </div>
+        </div>
+      </div>""")
 
-    main = hero + method + services + works + about + writing + faq + contact + "</main>\n"
+    main = hero + method + services + works + trust + about + agency + writing + faq + contact + "</main>\n"
     return page(META["title"], META["description"], "/", main)
 
 
@@ -711,7 +942,7 @@ def case_page(work):
 
     <div class="case-study__cta">
       <h2>{e(CONTACT["question"])}</h2>
-      <a href="mailto:{EMAIL}" class="btn btn-primary">{e(CONTACT["closing"])}</a>
+      <a href="/#contatto" class="btn btn-primary">{e(NAV["cta"])} &rarr;</a>
     </div>
   </div>
 </main>
@@ -749,6 +980,13 @@ def privacy():
          "nessuna richiesta viene inviata a Google o ad altri servizi esterni. "
          "Il sito non installa cookie, né tecnici né di profilazione: per questo non è presente un banner."),
         ("Statistiche", analytics_text),
+        ("Modulo di contatto",
+         "Se compili il modulo, ricevo nome, azienda, indirizzo email e quello che scrivi sul problema e sugli "
+         "strumenti che usi. Li uso solo per risponderti e, se lo chiedi, per preparare una proposta. "
+         "Base giuridica: la tua richiesta e le misure precontrattuali (art. 6.1.b GDPR). "
+         "Il modulo non salva i dati sul sito: la richiesta passa da Cloudflare e mi arriva via email tramite Resend. "
+         "Conservo le richieste per il tempo necessario alla trattativa e comunque non oltre 24 mesi, "
+         "salvo che tu diventi cliente."),
         ("Contatti via email",
          "Se mi scrivi, uso il tuo indirizzo e quello che mi racconti solo per risponderti e, se lo chiedi, "
          "per preparare una proposta. Base giuridica: la tua richiesta e le misure precontrattuali "
@@ -766,7 +1004,10 @@ def privacy():
          "conversazioni vengono elaborati sui suoi server negli Stati Uniti, sulla base delle clausole "
          "contrattuali standard della Commissione europea, e non vengono usati per addestrare i modelli. "
          "Hetzner Online GmbH (Germania), che ospita i server della demo e delle statistiche. "
-         "GitHub Inc., che ospita il sito."),
+         "GitHub Inc., che ospita il sito. "
+         "Cloudflare Inc., che riceve le richieste del modulo di contatto, e Resend Inc., che me le inoltra "
+         "via email; la casella di destinazione è su Google. Per i fornitori con sede negli Stati Uniti il "
+         "trasferimento avviene con le clausole contrattuali standard o nell'ambito del Data Privacy Framework."),
         ("I tuoi diritti",
          f"Puoi chiedere in qualsiasi momento di accedere ai tuoi dati, correggerli, cancellarli, limitarne "
          f"il trattamento o opporti (artt. 15-22 GDPR), scrivendo a {EMAIL}. "
@@ -792,7 +1033,7 @@ def privacy():
 
 
 def sitemap():
-    urls = ["/"] + [case_href(w) for w in WORKS["cases"]] + ["/privacy/"]
+    urls = ["/"] + [case_href(w) for w in visible_cases()] + ["/privacy/"]
     body = "\n".join(f"  <url><loc>{SITE_URL}{u}</loc></url>" for u in urls)
     return f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{body}\n</urlset>\n'
 
@@ -808,7 +1049,7 @@ if __name__ == "__main__":
     write("index.html", home())
     write("404.html", not_found())
     write("privacy/index.html", privacy())
-    for w in WORKS["cases"]:
+    for w in visible_cases():
         write(f"lavori/{w['slug']}/index.html", case_page(w))
     write("sitemap.xml", sitemap())
     write("robots.txt", f"User-agent: *\nAllow: /\n\nSitemap: {SITE_URL}/sitemap.xml\n")
