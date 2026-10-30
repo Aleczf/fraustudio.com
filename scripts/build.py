@@ -23,8 +23,10 @@ GITHUB = "https://github.com/Aleczf"
 LINKEDIN = "https://www.linkedin.com/in/alessandro-frau-095b60153/"
 VAT = "14815310967"
 
-# Statistiche senza cookie (Umami sulla VPS). Finché UMAMI_WEBSITE_ID è vuoto lo script non viene caricato.
-UMAMI_SRC = "https://stats.fraustudio.com/script.js"
+# Statistiche senza cookie (Umami Cloud, piano gratuito). Finché UMAMI_WEBSITE_ID è vuoto lo script
+# non viene caricato e il tracciamento eventi resta spento. Con una VPS propria basta cambiare UMAMI_SRC
+# (es. https://stats.fraustudio.com/script.js) e il testo della privacy. Eventi e UTM: scripts/statistiche.md
+UMAMI_SRC = "https://cloud.umami.is/script.js"
 UMAMI_WEBSITE_ID = ""
 
 # Endpoint del Cloudflare Worker che riceve il modulo di contatto (cartella worker/).
@@ -546,18 +548,6 @@ SCRIPT = """
     closeBtn.addEventListener("click", closeMenu);
     menu.querySelectorAll("a").forEach(function (a) { a.addEventListener("click", closeMenu); });
 
-    // Statistiche: conta i clic che contano (email, WhatsApp, LinkedIn, GitHub). Solo se Umami è attivo.
-    document.addEventListener("click", function (ev) {
-      var a = ev.target.closest && ev.target.closest("a[href]");
-      if (!a || !window.umami) return;
-      var h = a.getAttribute("href");
-      var name = h.indexOf("mailto:") === 0 ? "clic-email"
-        : h.indexOf("wa.me") > -1 ? "clic-whatsapp-demo"
-        : h.indexOf("linkedin.com") > -1 ? "clic-linkedin"
-        : h.indexOf("github.com") > -1 ? "clic-github" : null;
-      if (name) window.umami.track(name);
-    });
-
     // Fade-in-up delle sezioni allo scroll, una volta sola (Section.tsx). Soglia 0 e non 0.2:
     // con 12 card la sezione Lavori su telefono è alta più di 5 schermi e il 20% non entra mai.
     var items = document.querySelectorAll(".reveal");
@@ -571,6 +561,93 @@ SCRIPT = """
       });
     }, { threshold: 0, rootMargin: "0px 0px -15% 0px" });
     items.forEach(function (el) { io.observe(el); });
+  })();
+  // Statistiche (Umami): eventi su clic, scroll, sezioni, FAQ e modulo. Gira solo se lo script di Umami
+  // è nella pagina; gli eventi che arrivano prima che Umami sia caricato vengono messi in coda.
+  (function () {
+    if (!document.querySelector("script[data-website-id]")) return;
+    var queue = [];
+    function track(name, data) {
+      if (window.umami) window.umami.track(name, data);
+      else if (queue) queue.push([name, data]);
+    }
+    window.addEventListener("load", function () {
+      var q = queue; queue = null;
+      if (window.umami) q.forEach(function (ev) { window.umami.track(ev[0], ev[1]); });
+    });
+
+    var path = location.pathname;
+    // Dove sta un elemento: header, menu mobile, footer, sezione della home o pagina del caso.
+    function where(el) {
+      if (el.closest(".site-header")) return "header";
+      if (el.closest(".mobile-menu")) return "menu-mobile";
+      if (el.closest(".site-footer")) return "footer";
+      var s = el.closest("section[id]");
+      return s ? s.id : path;
+    }
+    function label(el) { return (el.textContent || "").replace(/\\s+/g, " ").trim().slice(0, 60); }
+
+    document.addEventListener("click", function (ev) {
+      var a = ev.target.closest && ev.target.closest("a[href]");
+      if (!a) return;
+      var h = a.getAttribute("href");
+      var pos = where(a);
+      var caso = h.match(/^\\/lavori\\/([^/]+)\\/?$/);
+      if (h.indexOf("mailto:") === 0) track("clic-email", { posizione: pos });
+      else if (h.indexOf("wa.me") > -1) track("clic-whatsapp-demo", { posizione: pos });
+      else if (h.indexOf("linkedin.com") > -1) track("clic-linkedin", { posizione: pos });
+      else if (h.indexOf("github.com") > -1) track("clic-github", { posizione: pos });
+      else if (/#contatto$/.test(h)) track("clic-cta-contatto", { posizione: pos, testo: label(a) });
+      else if (caso) track("apri-caso", { caso: caso[1], posizione: pos });
+      else if (/^https?:/.test(h) && a.host !== location.host) track("link-esterno", { url: a.host + a.pathname, posizione: pos });
+      else if (a.closest(".site-nav, .mobile-menu__nav")) track("clic-menu", { voce: label(a) });
+    });
+
+    // Profondità di scroll, una volta per soglia
+    var marks = [25, 50, 75, 100];
+    function onDepth() {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var pct = max > 0 ? (window.scrollY / max) * 100 : 100;
+      while (marks.length && pct >= marks[0] - 1) track("scroll", { percentuale: marks.shift(), pagina: path });
+      if (!marks.length) window.removeEventListener("scroll", onDepth);
+    }
+    window.addEventListener("scroll", onDepth, { passive: true });
+
+    // Sezioni della home viste: quando attraversano la metà dello schermo, una volta sola
+    if ("IntersectionObserver" in window) {
+      var seen = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { track("sezione-vista", { sezione: e.target.id }); seen.unobserve(e.target); }
+        });
+      }, { rootMargin: "-50% 0px -50% 0px" });
+      document.querySelectorAll("main section[id]").forEach(function (el) { seen.observe(el); });
+    }
+
+    // FAQ aperte
+    document.querySelectorAll("details.faq__item").forEach(function (d) {
+      d.addEventListener("toggle", function () {
+        if (d.open) track("faq-aperta", { domanda: label(d.querySelector("summary")) });
+      });
+    });
+
+    // Modulo: iniziato, e abbandonato se si lascia la pagina senza inviarlo
+    var form = document.getElementById("contact-form");
+    if (form) {
+      var lastField = null;
+      form.addEventListener("focusin", function (ev) {
+        if (!ev.target.name || ev.target.name === "sito") return;
+        if (!lastField) track("modulo-iniziato");
+        lastField = ev.target.name;
+      });
+      window.addEventListener("pagehide", function () {
+        if (lastField && !form.dataset.sent) track("modulo-abbandonato", { ultimo_campo: lastField });
+      });
+    }
+
+    // 404: quale indirizzo rotto e da dove arriva
+    if (document.querySelector(".not-found")) {
+      track("pagina-404", { percorso: path, provenienza: document.referrer || "diretto" });
+    }
   })();
   // Modulo di contatto: invio al Cloudflare Worker senza ricaricare la pagina.
   (function () {
@@ -601,10 +678,12 @@ SCRIPT = """
       }).then(function (r) {
         if (!r.ok) throw new Error(String(r.status));
         form.reset();
+        form.dataset.sent = "1";
         show(MSG_SENT, false);
         if (window.umami) window.umami.track("invio-modulo");
       }).catch(function () {
         show(MSG_ERROR + " " + EMAIL + ".", true);
+        if (window.umami) window.umami.track("errore-modulo");
       }).then(function () { button.disabled = false; });
     });
     if (/[?&]inviato=1/.test(location.search)) show(MSG_SENT, false);
@@ -964,10 +1043,13 @@ def not_found():
 
 def privacy():
     analytics_text = (
-        "Il sito usa Umami, uno strumento di statistica installato su un nostro server in Germania. "
-        "Non usa cookie e non raccoglie dati che identificano il visitatore: registra in forma aggregata "
-        "pagine visitate, sito di provenienza, tipo di dispositivo e i clic sui contatti. "
-        "Questi dati servono solo a capire quali contenuti sono utili."
+        "Il sito usa Umami, uno strumento di statistica senza cookie fornito da Umami Software Inc. "
+        "Non installa nulla sul tuo dispositivo e non conserva l'indirizzo IP: lo usa solo per ricavare "
+        "paese e città, poi lo scarta. Registra pagine visitate, sito di provenienza (compresi i parametri "
+        "delle campagne), tipo di dispositivo, browser e sistema operativo, quanto si scorre la pagina, "
+        "le sezioni viste e i clic su contatti, casi studio e link esterni, oltre all'avvio del modulo "
+        "di contatto (non il suo contenuto). I dati non permettono di risalire a chi sei e servono solo "
+        "a capire quali contenuti sono utili. Base giuridica: legittimo interesse (art. 6.1.f GDPR)."
     ) if UMAMI_WEBSITE_ID else (
         "Il sito non usa strumenti di statistica né cookie di profilazione."
     )
@@ -1003,7 +1085,8 @@ def privacy():
          "Anthropic PBC, che fornisce il modello di intelligenza artificiale usato da Pico: i testi delle "
          "conversazioni vengono elaborati sui suoi server negli Stati Uniti, sulla base delle clausole "
          "contrattuali standard della Commissione europea, e non vengono usati per addestrare i modelli. "
-         "Hetzner Online GmbH (Germania), che ospita i server della demo e delle statistiche. "
+         "Hetzner Online GmbH (Germania), che ospita i server della demo. "
+         + ("Umami Software Inc., che fornisce le statistiche del sito. " if UMAMI_WEBSITE_ID else "") +
          "GitHub Inc., che ospita il sito. "
          "Cloudflare Inc., che riceve le richieste del modulo di contatto, e Resend Inc., che me le inoltra "
          "via email; la casella di destinazione è su Google. Per i fornitori con sede negli Stati Uniti il "
