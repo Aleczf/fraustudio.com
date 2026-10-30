@@ -29,6 +29,9 @@ VAT = "14815310967"
 UMAMI_SRC = "https://cloud.umami.is/script.js"
 UMAMI_WEBSITE_ID = ""
 
+# Demo di Pico su WhatsApp: finché è False la privacy non ne parla (sezione e fornitori Meta, Anthropic, Hetzner).
+PICO_DEMO_LIVE = False
+
 # Endpoint del Cloudflare Worker che riceve il modulo di contatto (cartella worker/).
 FORM_ENDPOINT = "https://fraustudio-contatto.fraustudio.workers.dev"
 # Link di prenotazione (Cal.com, Calendly...). Se None, il bottone apre una email precompilata.
@@ -1074,18 +1077,21 @@ def privacy():
          "per preparare una proposta. Base giuridica: la tua richiesta e le misure precontrattuali "
          "(art. 6.1.b GDPR). Conservo la corrispondenza per il tempo necessario alla trattativa e, se diventi "
          "cliente, per gli obblighi di legge."),
-        ("Demo di Pico su WhatsApp",
+    ]
+    if PICO_DEMO_LIVE:
+        blocks.append(("Demo di Pico su WhatsApp",
          "Se scrivi al numero della demo, Pico (un agente di intelligenza artificiale) tratta il tuo numero, "
          "il nome del tuo profilo WhatsApp e i messaggi che invii, per farti provare il servizio e, se lo chiedi, "
          "per ricontattarti. Base giuridica: la tua richiesta (art. 6.1.b GDPR). Le conversazioni della demo "
          "vengono cancellate automaticamente 30 giorni dopo l'ultimo messaggio. "
-         "Per non ricevere più messaggi basta scrivere STOP."),
+         "Per non ricevere più messaggi basta scrivere STOP."))
+    blocks += [
         ("Fornitori che trattano i dati",
-         "Meta Platforms Ireland (WhatsApp Business Platform), per la consegna dei messaggi della demo. "
-         "Anthropic PBC, che fornisce il modello di intelligenza artificiale usato da Pico: i testi delle "
-         "conversazioni vengono elaborati sui suoi server negli Stati Uniti, sulla base delle clausole "
-         "contrattuali standard della Commissione europea, e non vengono usati per addestrare i modelli. "
-         "Hetzner Online GmbH (Germania), che ospita i server della demo. "
+         ("Meta Platforms Ireland (WhatsApp Business Platform), per la consegna dei messaggi della demo. "
+          "Anthropic PBC, che fornisce il modello di intelligenza artificiale usato da Pico: i testi delle "
+          "conversazioni vengono elaborati sui suoi server negli Stati Uniti, sulla base delle clausole "
+          "contrattuali standard della Commissione europea, e non vengono usati per addestrare i modelli. "
+          "Hetzner Online GmbH (Germania), che ospita i server della demo. " if PICO_DEMO_LIVE else "")
          + ("Umami Software Inc., che fornisce le statistiche del sito. " if UMAMI_WEBSITE_ID else "") +
          "GitHub Inc., che ospita il sito. "
          "Cloudflare Inc., che riceve le richieste del modulo di contatto, e Resend Inc., che me le inoltra "
@@ -1112,7 +1118,7 @@ def privacy():
   </div>
 </main>
 """
-    return page("Privacy · Frau Studio", "Come Frau Studio tratta i dati di chi visita il sito, scrive o prova la demo di Pico.", "/privacy/", main)
+    return page("Privacy · Frau Studio", "Come Frau Studio tratta i dati di chi visita il sito, scrive" + (" o prova la demo di Pico." if PICO_DEMO_LIVE else " o compila il modulo."), "/privacy/", main)
 
 
 def sitemap():
