@@ -22,6 +22,8 @@ EMAIL = "alessandro.frau88@gmail.com"
 GITHUB = "https://github.com/Aleczf"
 LINKEDIN = "https://www.linkedin.com/in/alessandro-frau-095b60153/"
 VAT = "14815310967"
+# Immagine di anteprima social (1200x630). Quando la cambi, usa un nome NUOVO: LinkedIn e le CDN tengono in cache il vecchio file.
+OG_IMAGE = f"{SITE_URL}/og-fraustudio-2026-11.png"
 
 # Statistiche senza cookie (Umami sulla VPS). Finché UMAMI_WEBSITE_ID è vuoto lo script non viene caricato.
 UMAMI_SRC = "https://stats.fraustudio.com/script.js"
@@ -430,10 +432,12 @@ def head(title, description, path):
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(description)}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="{SITE_URL}/og.png">
+<meta property="og:image" content="{OG_IMAGE}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Frau Studio, Alessandro Frau: automazione e integrazioni per PMI">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="{OG_IMAGE}">
 <link rel="preload" href="/assets/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/fraunces-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/fonts.css?v={FONTS_VERSION}">
